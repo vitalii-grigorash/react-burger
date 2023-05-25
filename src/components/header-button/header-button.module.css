@@ -1,0 +1,21 @@
+.header-button {
+    display: flex;
+    height: 56px;
+    padding: 0 20px;
+    justify-content: center;
+    align-items: center;
+    color: #8585AD;
+    border-radius: 40px;
+}
+.header-button:hover {
+    cursor: pointer;
+    color: #F2F2F3;
+}
+.button-text {
+    font-family: 'JetBrains Mono', Arial, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    margin: 0 0 0 9px;
+}

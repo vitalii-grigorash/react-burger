@@ -1,0 +1,28 @@
+.burger-ingredients {
+    display: flex;
+    flex-direction: column;
+    margin: 0 40px auto 0;
+    color: #F2F2F3;
+}
+.heading {
+    font-family: 'JetBrains Mono', Arial, sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 40px;
+    margin: 40px auto 0 0;
+}
+.ingredients-main-container {
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    margin: 40px 0 0;
+    max-height: 632px;
+}
+.ingredients-main-container::-webkit-scrollbar {
+    width: 8px;
+    background: #2F2F37;
+}
+.ingredients-main-container::-webkit-scrollbar-thumb {
+    background: #8585AD;
+}
