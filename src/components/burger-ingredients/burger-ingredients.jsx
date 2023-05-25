@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styles from './burger-ingredients.module.css';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import Ingredients from '../ingredients/ingredients';
+import { ingredientsPropTypes } from '../../utils/types';
 
 function BurgerIngredients(props) {
 
@@ -12,19 +13,19 @@ function BurgerIngredients(props) {
         topping
     } = props;
 
-    const [current, setCurrent] = useState('one');
+    const [current, setCurrent] = useState('bun');
 
     // Какая-то логика в будущем при клике на вкладки
     function onBunTabClick() {
-        setCurrent('one');
+        setCurrent('bun');
     }
 
     function onSauceTabClick() {
-        setCurrent('two');
+        setCurrent('sauce');
     }
 
     function onToppingTabClick() {
-        setCurrent('three');
+        setCurrent('topping');
     }
     // ----------------------------------------------
 
@@ -32,13 +33,13 @@ function BurgerIngredients(props) {
         <section className={styles['burger-ingredients']}>
             <h1 className={styles.heading}>Соберите бургер</h1>
             <div style={{ display: 'flex', marginTop: 20 }}>
-                <Tab value="one" active={current === 'one'} onClick={onBunTabClick}>
+                <Tab value="bun" active={current === 'bun'} onClick={onBunTabClick}>
                     Булки
                 </Tab>
-                <Tab value="two" active={current === 'two'} onClick={onSauceTabClick}>
+                <Tab value="sauce" active={current === 'sauce'} onClick={onSauceTabClick}>
                     Соусы
                 </Tab>
-                <Tab value="three" active={current === 'three'} onClick={onToppingTabClick}>
+                <Tab value="topping" active={current === 'topping'} onClick={onToppingTabClick}>
                     Начинки
                 </Tab>
             </div>
@@ -63,7 +64,7 @@ function BurgerIngredients(props) {
 export default BurgerIngredients;
 
 BurgerIngredients.propTypes = {
-    bun: PropTypes.array,
-    sauce: PropTypes.array,
-    topping: PropTypes.array
+    bun: PropTypes.arrayOf(ingredientsPropTypes),
+    sauce: PropTypes.arrayOf(ingredientsPropTypes),
+    topping: PropTypes.arrayOf(ingredientsPropTypes)
 };

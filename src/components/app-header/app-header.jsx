@@ -5,18 +5,11 @@ import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-dev
 function AppHeader() {
 
     // Заготовка методов для будущих кликов по кнопкам в шапке
+    function onBurgerButtonClick() {}
 
-    function onBurgerButtonClick() {
-        console.log('Burger click');
-    }
+    function onListButtonClick() {}
 
-    function onListButtonClick() {
-        console.log('List click');
-    }
-
-    function onProfileButtonClick() {
-        console.log('Profile click');
-    }
+    function onProfileButtonClick() {}
 
     return (
         <header className={styles['app-header']}>
