@@ -94,7 +94,7 @@ function BurgerConstructor(props) {
 export default BurgerConstructor;
 
 BurgerConstructor.propTypes = {
-    bun: PropTypes.arrayOf(ingredientsPropTypes),
-    sauce: PropTypes.arrayOf(ingredientsPropTypes),
-    topping: PropTypes.arrayOf(ingredientsPropTypes)
+    bun: PropTypes.arrayOf(ingredientsPropTypes.isRequired).isRequired,
+    sauce: PropTypes.arrayOf(ingredientsPropTypes.isRequired).isRequired,
+    topping: PropTypes.arrayOf(ingredientsPropTypes.isRequired).isRequired
 };

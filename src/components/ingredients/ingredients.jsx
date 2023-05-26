@@ -33,5 +33,5 @@ export default Ingredients;
 
 Ingredients.propTypes = {
     heading: PropTypes.string,
-    data: PropTypes.arrayOf(ingredientsPropTypes)
+    data: PropTypes.arrayOf(ingredientsPropTypes.isRequired).isRequired
 };
