@@ -21,6 +21,7 @@ function BurgerConstructor(props) {
     // Получаем первый[0] элемент массива bun
     // и все ингридиенты из data добавляем в массив для визуализации
     // потом внести тут изменения
+    
     useEffect(() => {
         if (topping.length !== 0) {
             const allIngredients = sauce.concat(topping);
