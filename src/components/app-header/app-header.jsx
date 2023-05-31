@@ -1,15 +1,16 @@
+import React from 'react';
 import styles from './app-header.module.css';
 import HeaderButton from '../header-button/header-button';
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
-function AppHeader() {
+const AppHeader = React.memo(() => {
 
     // Заготовка методов для будущих кликов по кнопкам в шапке
-    function onBurgerButtonClick() {}
+    function onBurgerButtonClick() { }
 
-    function onListButtonClick() {}
+    function onListButtonClick() { }
 
-    function onProfileButtonClick() {}
+    function onProfileButtonClick() { }
 
     return (
         <header className={styles['app-header']}>
@@ -37,6 +38,6 @@ function AppHeader() {
             </nav>
         </header>
     );
-}
+})
 
 export default AppHeader;

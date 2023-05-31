@@ -12,3 +12,6 @@
   min-width: 300px;
   background: #131316;
 }
+.app-hidden {
+  overflow: hidden;
+}

@@ -10,7 +10,8 @@ function BurgerConstructor(props) {
     const {
         bun,
         sauce,
-        topping
+        topping,
+        openModal
     } = props;
 
     const [selectedIngredients, setSelectedIngredients] = useState([]);
@@ -37,6 +38,10 @@ function BurgerConstructor(props) {
         }
     }, [bun, sauce, topping])
     // ----------------------------------------------------------------------------------
+
+    function onOrderButtonClick () {
+        openModal(true);
+    }
 
     return (
         <section className={styles['burger-constructor']}>
@@ -82,7 +87,7 @@ function BurgerConstructor(props) {
                             <p className={styles['total-price']}>{totalPrice}</p>
                             <img className={styles['currency-icon']} src={currencyIcon} alt="Иконка большая" />
                         </div>
-                        <Button htmlType="button" type="primary" size="large">
+                        <Button htmlType="button" type="primary" size="large" onClick={onOrderButtonClick}>
                             Оформить заказ
                         </Button>
                     </div>
@@ -97,5 +102,6 @@ export default BurgerConstructor;
 BurgerConstructor.propTypes = {
     bun: PropTypes.arrayOf(ingredientsPropTypes.isRequired).isRequired,
     sauce: PropTypes.arrayOf(ingredientsPropTypes.isRequired).isRequired,
-    topping: PropTypes.arrayOf(ingredientsPropTypes.isRequired).isRequired
+    topping: PropTypes.arrayOf(ingredientsPropTypes.isRequired).isRequired,
+    openModal: PropTypes.func
 };

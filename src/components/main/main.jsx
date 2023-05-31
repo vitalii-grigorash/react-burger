@@ -1,10 +1,16 @@
+import { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import styles from './main.module.css';
+import { ingredientsPropTypes } from '../../utils/types';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
-import { data } from '../../utils/data';
-import { useEffect, useState } from 'react';
 
-function Main() {
+function Main (props) {
+
+    const {
+        ingredients,
+        openModal
+    } = props;
 
     const [bun, setBun] = useState([]);
     const [sauce, setSauce] = useState([]);
@@ -17,7 +23,7 @@ function Main() {
         const sauceArr = [];
         const toppingArr = [];
 
-        data.forEach((i) => {
+        ingredients.forEach((i) => {
             if (i.type === 'bun') {
                 bunArr.push(i);
             } else if (i.type === 'sauce') {
@@ -31,7 +37,7 @@ function Main() {
         setSauce(sauceArr);
         setTopping(toppingArr);
 
-    }, [])
+    }, [ingredients])
 
     return (
         <main className={styles.main}>
@@ -39,14 +45,21 @@ function Main() {
                 bun={bun}
                 sauce={sauce}
                 topping={topping}
+                openModal={openModal}
             />
             <BurgerConstructor
                 bun={bun}
                 sauce={sauce}
                 topping={topping}
+                openModal={openModal}
             />
         </main>
     );
 }
 
 export default Main;
+
+Main.propTypes = {
+    ingredients: PropTypes.arrayOf(ingredientsPropTypes.isRequired).isRequired,
+    openModal: PropTypes.func
+};

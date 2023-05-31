@@ -10,7 +10,8 @@ function BurgerIngredients(props) {
     const {
         bun,
         sauce,
-        topping
+        topping,
+        openModal
     } = props;
 
     const [current, setCurrent] = useState('bun');
@@ -47,14 +48,17 @@ function BurgerIngredients(props) {
                 <Ingredients
                     heading='Булки'
                     data={bun}
+                    openModal={openModal}
                 />
                 <Ingredients
                     heading='Соусы'
                     data={sauce}
+                    openModal={openModal}
                 />
                 <Ingredients
                     heading='Начинки'
                     data={topping}
+                    openModal={openModal}
                 />
             </div>
         </section>
@@ -66,5 +70,6 @@ export default BurgerIngredients;
 BurgerIngredients.propTypes = {
     bun: PropTypes.arrayOf(ingredientsPropTypes.isRequired).isRequired,
     sauce: PropTypes.arrayOf(ingredientsPropTypes.isRequired).isRequired,
-    topping: PropTypes.arrayOf(ingredientsPropTypes.isRequired).isRequired
+    topping: PropTypes.arrayOf(ingredientsPropTypes.isRequired).isRequired,
+    openModal: PropTypes.func
 };

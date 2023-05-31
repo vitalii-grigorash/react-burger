@@ -7,7 +7,8 @@ function Ingredients(props) {
 
     const {
         heading,
-        data
+        data,
+        openModal
     } = props;
 
     return (
@@ -20,6 +21,7 @@ function Ingredients(props) {
                             <Ingredient
                                 key={item._id}
                                 item={item}
+                                openModal={openModal}
                             />
                         ))}
                     </>
@@ -33,5 +35,6 @@ export default Ingredients;
 
 Ingredients.propTypes = {
     heading: PropTypes.string,
-    data: PropTypes.arrayOf(ingredientsPropTypes.isRequired).isRequired
+    data: PropTypes.arrayOf(ingredientsPropTypes.isRequired).isRequired,
+    openModal: PropTypes.func
 };

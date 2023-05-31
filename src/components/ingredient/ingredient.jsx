@@ -1,15 +1,21 @@
 import styles from './ingredient.module.css';
 import { ingredientsPropTypes } from '../../utils/types';
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
+import PropTypes from 'prop-types';
 
 function Ingredient(props) {
 
     const {
-        item
+        item,
+        openModal
     } = props;
 
+    function showIngredientDetails() {
+        openModal(false, item);
+    }
+
     return (
-        <section className={styles.ingredient}>
+        <section className={styles.ingredient} onClick={showIngredientDetails}>
             <div className={styles['counter-container']}>
                 <Counter count={1} size="default" extraClass="m-0" />
             </div>
@@ -26,5 +32,6 @@ function Ingredient(props) {
 export default Ingredient;
 
 Ingredient.propTypes = {
-    item: ingredientsPropTypes.isRequired
+    item: ingredientsPropTypes.isRequired,
+    openModal: PropTypes.func
 };
