@@ -1,0 +1,25 @@
+.ingredients {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 40px 0 0;
+}
+.ingredients:first-of-type {
+    margin: 0;
+}
+.heading {
+    font-family: 'JetBrains Mono', Arial, sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 30px;
+    margin: 0 auto 0 0;
+}
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(auto, 1fr);
+    grid-row-gap: 32px;
+    grid-column-gap: 24px;
+    margin: 24px auto 0;
+}

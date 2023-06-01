@@ -1,0 +1,57 @@
+.burger-constructor {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 100px 0 auto 0;
+}
+.bun-container {
+    display: flex;
+    margin: 0 16px 0 auto;
+}
+.constructor-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: scroll;
+    max-height: 444px;
+    margin: 0;
+}
+.constructor-container::-webkit-scrollbar {
+    width: 8px;
+    background: #2F2F37;
+}
+.constructor-container::-webkit-scrollbar-thumb {
+    background: #8585AD;
+}
+.topping-container {
+    display: flex;
+    align-items: center;
+}
+.item-container {
+    display: flex;
+    margin: 0 8px;
+    width: 100%;
+}
+.button-container {
+    display: flex;
+    margin: 30px 0 0 auto;
+    align-items: center;
+}
+.total-price-container {
+    display: flex;
+    align-items: center;
+    margin: auto 40px auto 0;
+}
+.total-price {
+    font-family: 'Iceland', Arial, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 48px;
+    line-height: 36px;
+    margin: auto 8px auto 0;
+}
+.currency-icon {
+    width: 36px;
+    height: 36px;
+    margin: 0;
+}

@@ -1,0 +1,46 @@
+.ingredient-details {
+    display: flex;
+    flex-direction: column;
+    margin: 0 120px 60px;
+}
+.ingredient-image {
+    width: 480px;
+    height: 240px;
+    margin: 0 auto;
+}
+.ingredient-name {
+    font-family: 'JetBrains Mono', Arial, sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 30px;
+    color: #F2F2F3;
+    margin: 16px auto 0;
+}
+.macronutrients-container {
+    display: flex;
+    margin: 32px auto 0;
+}
+.nutrition-container {
+    display: flex;
+    flex-direction: column;
+    margin: auto 20px auto 0;
+}
+.nutrition-container:last-of-type {
+    margin: auto 0;
+}
+.nutrition-heading {
+    font-family: 'JetBrains Mono', Arial, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: #8585AD;
+    margin: 0 auto;
+}
+.nutrition-value {
+    composes: nutrition-heading;
+    font-family: 'Iceland', Arial, sans-serif;
+    font-size: 28px;
+    margin: 8px auto 0;
+}
