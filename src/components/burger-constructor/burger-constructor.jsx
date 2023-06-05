@@ -40,7 +40,7 @@ function BurgerConstructor(props) {
     // ----------------------------------------------------------------------------------
 
     function onOrderButtonClick () {
-        openModal(true);
+        openModal(true)
     }
 
     return (
