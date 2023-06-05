@@ -1,3 +1,3 @@
 export const config = {
-    api_url: "https://norma.nomoreparties.space/api"
+    baseUrl: "https://norma.nomoreparties.space/api"
 };

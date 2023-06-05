@@ -10,7 +10,7 @@ function Modal(props) {
 
     const {
         onClose,
-        isOrderOpen,
+        title,
         children
     } = props;
 
@@ -32,9 +32,7 @@ function Modal(props) {
             <div className={styles.modal}>
                 <div className={styles['modal-container']}>
                     <div className={styles['modal-heading-container']}>
-                        {!isOrderOpen && (
-                            <h2 className={styles['modal-heading']}>Детали ингредиента</h2>
-                        )}
+                        <h2 className={styles['modal-heading']}>{title}</h2>
                         <div className={styles['close-button-container']} onClick={onClose}>
                             <CloseIcon type="primary" />
                         </div>

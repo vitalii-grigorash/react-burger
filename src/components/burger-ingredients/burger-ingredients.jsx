@@ -57,7 +57,7 @@ function BurgerIngredients(props) {
     return (
         <section className={styles['burger-ingredients']}>
             <h1 className={styles.heading}>Соберите бургер</h1>
-            <div style={{ display: 'flex', marginTop: 20 }}>
+            <div className={styles['tabs-container']}>
                 <Tab value="bun" active={current === 'bun'} onClick={onBunTabClick}>
                     Булки
                 </Tab>

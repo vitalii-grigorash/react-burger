@@ -18,8 +18,8 @@ function reducer(state, action) {
       return { price: state.price + action.payload };
     case "decrement":
       return { price: state.price - action.payload };
-      case "reset":
-        return totalPriceInitialState;
+    case "reset":
+      return totalPriceInitialState;
     default:
       throw new Error(`Wrong type of action: ${action.type}`);
   }
@@ -33,11 +33,13 @@ function App() {
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
   const [selectedIngredient, setSelectedIngredient] = useState({});
   const [priceState, priceDispatcher] = useReducer(reducer, totalPriceInitialState, undefined);
+  const [modalTitle, setModalTitle] = useState('');
 
   function closeModal() {
     setIsModalOpen(false);
     setIsOrderModalOpen(false);
     setSelectedIngredient({});
+    setModalTitle('');
   }
 
   function openModal(isOrderModal, ingredient) {
@@ -47,6 +49,7 @@ function App() {
     } else {
       setIsModalOpen(true);
       setSelectedIngredient(ingredient);
+      setModalTitle('Детали ингредиента');
     }
   }
 
@@ -59,7 +62,7 @@ function App() {
         }
       })
       .catch((err) => {
-        throw new Error(err.message);
+        console.log(`Ошибка: ${err}`);
       })
   }
 
@@ -69,7 +72,7 @@ function App() {
         setIngredients(res.data);
       })
       .catch((err) => {
-        throw new Error(err.message);
+        console.log(`Ошибка: ${err}`);
       })
   }, [])
 
@@ -89,7 +92,7 @@ function App() {
           {isModalOpen && (
             <Modal
               onClose={closeModal}
-              isOrderOpen={isOrderModalOpen}
+              title={modalTitle}
             >
               {isOrderModalOpen ? (
                 <OrderDetails />
