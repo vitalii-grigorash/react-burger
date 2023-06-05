@@ -1,20 +1,44 @@
-import { useState } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styles from './burger-ingredients.module.css';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import Ingredients from '../ingredients/ingredients';
-import { ingredientsPropTypes } from '../../utils/types';
+import { IngredientsContext } from '../../services/ingredientsContext';
 
 function BurgerIngredients(props) {
 
     const {
-        bun,
-        sauce,
-        topping,
         openModal
     } = props;
 
+    const ingredients = useContext(IngredientsContext);
+    const [bun, setBun] = useState([]);
+    const [sauce, setSauce] = useState([]);
+    const [topping, setTopping] = useState([]);
     const [current, setCurrent] = useState('bun');
+
+    // Разбиваем исходный массив на разные по типам
+    useEffect(() => {
+
+        const bunArr = [];
+        const sauceArr = [];
+        const toppingArr = [];
+
+        ingredients.forEach((i) => {
+            if (i.type === 'bun') {
+                bunArr.push(i);
+            } else if (i.type === 'sauce') {
+                sauceArr.push(i);
+            } else if (i.type === 'main') {
+                toppingArr.push(i);
+            }
+        });
+
+        setBun(bunArr);
+        setSauce(sauceArr);
+        setTopping(toppingArr);
+
+    }, [ingredients])
 
     // Какая-то логика в будущем при клике на вкладки
     function onBunTabClick() {
@@ -68,8 +92,5 @@ function BurgerIngredients(props) {
 export default BurgerIngredients;
 
 BurgerIngredients.propTypes = {
-    bun: PropTypes.arrayOf(ingredientsPropTypes.isRequired).isRequired,
-    sauce: PropTypes.arrayOf(ingredientsPropTypes.isRequired).isRequired,
-    topping: PropTypes.arrayOf(ingredientsPropTypes.isRequired).isRequired,
     openModal: PropTypes.func
 };

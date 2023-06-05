@@ -1,46 +1,78 @@
+import React, { useContext } from 'react';
 import styles from './burger-constructor.module.css';
 import PropTypes from 'prop-types';
 import { ConstructorElement, DragIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useEffect, useState } from 'react';
-import { ingredientsPropTypes } from '../../utils/types';
+import { IngredientsContext } from '../../services/ingredientsContext';
+import { TotalPriceContext } from '../../services/totalPriceContext';
 import currencyIcon from '../../images/currency-icon.svg';
 
 function BurgerConstructor(props) {
 
     const {
-        bun,
-        sauce,
-        topping,
-        openModal
+        createNewOrder
     } = props;
+
+    const ingredients = useContext(IngredientsContext);
+
+    const { priceState, priceDispatcher } = useContext(TotalPriceContext);
 
     const [selectedIngredients, setSelectedIngredients] = useState([]);
     const [selectedBun, setSelectedBun] = useState({});
-    const [totalPrice, setTotalPrice] = useState(0);
+    const [allPrices, setAllPrices] = useState([]);
 
     // Пока на данном этапе у нас нет возможности выбрать bun или ингридиенты (как я понял)
     // Получаем первый[0] элемент массива bun
-    // и все ингридиенты из data добавляем в массив для визуализации
-    // потом внести тут изменения
-    
+    // и все ингридиенты из ingredients добавляем в массив для визуализации
+    // потом внести тут изменения когда появится DnD и Redux
+
     useEffect(() => {
-        if (topping.length !== 0) {
-            const allIngredients = sauce.concat(topping);
+        if (ingredients.length !== 0) {
+
+            // Отделяем булки от остальных ингредиентов
+            const allIngredients = ingredients.filter(ingredient => ingredient.type !== "bun")
+            const allBuns = ingredients.filter(ingredient => ingredient.type === "bun")
             setSelectedIngredients(allIngredients)
-            setSelectedBun(bun[0]);
+            setSelectedBun(allBuns[0]);
+
             // Складываем все цены выбранных ингридиентов в отдельный массив
-            const allPrices = allIngredients.map(ingredient => ingredient.price);
-            // Добавляем цену булок
-            // Не знаю, это цена за одну булку или за пару, пока представим, что за пару
-            allPrices.push(bun[0].price);
-            // Суммируем все цены и кладем в переменную
-            setTotalPrice(allPrices.reduce((a, b) => a + b));
+            const pricesArr = allIngredients.map(ingredient => ingredient.price);
+
+            // Добавляем цены двух булок (верх и низ)
+            pricesArr.push(allBuns[0].price);
+            pricesArr.push(allBuns[0].price);
+
+            setAllPrices(pricesArr);
         }
-    }, [bun, sauce, topping])
+    }, [ingredients])
     // ----------------------------------------------------------------------------------
 
-    function onOrderButtonClick () {
-        openModal(true)
+    // Пока у нас нет логики добавлять и удалять ингредиенты по одному
+    // Поэтому методом forEach пройдёмся по всему массиву ингридиентов и подсчитаем общую стоимотсть
+    // Внести тут изменения, когда появится DnD и Redux
+    useEffect(() => {
+        // При ререндере компонента сбрасываем стейт, что бы корректо считалось
+        priceDispatcher({ type: 'reset' });
+        if (allPrices.length !== 0) {
+            allPrices.forEach(price => {
+                // Вызываем priceDispatcher для каждого элемента массива
+                priceDispatcher({ type: 'increment', payload: price });
+            })
+        }
+    }, [allPrices, priceDispatcher])
+
+    function onOrderButtonClick() {
+        // Дабавляем массив из _id выбранных ингредиентов
+        const allIngredientsId = selectedIngredients.map(ingredient => ingredient._id);
+        // Пока не понятно, надо ли добавлять два одинаковых _id булок в запрос или достаточно одного
+        // Пока добавим один _id
+        allIngredientsId.push(selectedBun._id);
+
+        const data = {
+            ingredients: allIngredientsId
+        }
+
+        createNewOrder(data);
     }
 
     return (
@@ -84,7 +116,7 @@ function BurgerConstructor(props) {
                     </div>
                     <div className={styles['button-container']}>
                         <div className={styles['total-price-container']}>
-                            <p className={styles['total-price']}>{totalPrice}</p>
+                            <p className={styles['total-price']}>{priceState.price}</p>
                             <img className={styles['currency-icon']} src={currencyIcon} alt="Иконка большая" />
                         </div>
                         <Button htmlType="button" type="primary" size="large" onClick={onOrderButtonClick}>
@@ -100,8 +132,5 @@ function BurgerConstructor(props) {
 export default BurgerConstructor;
 
 BurgerConstructor.propTypes = {
-    bun: PropTypes.arrayOf(ingredientsPropTypes.isRequired).isRequired,
-    sauce: PropTypes.arrayOf(ingredientsPropTypes.isRequired).isRequired,
-    topping: PropTypes.arrayOf(ingredientsPropTypes.isRequired).isRequired,
-    openModal: PropTypes.func
+    createNewOrder: PropTypes.func
 };
