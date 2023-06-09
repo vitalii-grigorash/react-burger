@@ -1,9 +1,10 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styles from './burger-ingredients.module.css';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import Ingredients from '../ingredients/ingredients';
-import { IngredientsContext } from '../../services/ingredientsContext';
+import { useSelector } from 'react-redux';
+import { getIngredients } from '../../services/burger-ingredients/selectors';
 
 function BurgerIngredients(props) {
 
@@ -11,7 +12,7 @@ function BurgerIngredients(props) {
         openModal
     } = props;
 
-    const ingredients = useContext(IngredientsContext);
+    const ingredients = useSelector(getIngredients);
     const [bun, setBun] = useState([]);
     const [sauce, setSauce] = useState([]);
     const [topping, setTopping] = useState([]);

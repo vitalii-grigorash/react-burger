@@ -6,9 +6,11 @@ import * as Api from '../../utils/api';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import IngredientDetails from '../ingredient-details/ingredient-details';
-import { IngredientsContext } from '../../services/ingredientsContext';
 import { OrderNumberContext } from '../../services/orderNumberContext';
 import { TotalPriceContext } from '../../services/totalPriceContext';
+import { loadIngredients } from '../../services/burger-ingredients/actions';
+import { useDispatch } from 'react-redux';
+import Loading from '../loading/loading';
 
 const totalPriceInitialState = { price: 0 };
 
@@ -27,7 +29,7 @@ function reducer(state, action) {
 
 function App() {
 
-  const [ingredients, setIngredients] = useState([]);
+  const dispatch = useDispatch();
   const [orderNumber, setOrderNumber] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
@@ -67,26 +69,18 @@ function App() {
   }
 
   useEffect(() => {
-    Api.getIngredients()
-      .then((res) => {
-        setIngredients(res.data);
-      })
-      .catch((err) => {
-        console.log(`Ошибка: ${err}`);
-      })
-  }, [])
+    dispatch(loadIngredients());
+  }, [dispatch])
 
   return (
     <div className={styles.app}>
       <AppHeader />
-      <IngredientsContext.Provider value={ingredients}>
-        <TotalPriceContext.Provider value={{ priceState, priceDispatcher }}>
-          <Main
-            openModal={openModal}
-            createNewOrder={createNewOrder}
-          />
-        </TotalPriceContext.Provider>
-      </IngredientsContext.Provider>
+      <TotalPriceContext.Provider value={{ priceState, priceDispatcher }}>
+        <Main
+          openModal={openModal}
+          createNewOrder={createNewOrder}
+        />
+      </TotalPriceContext.Provider>
       <OrderNumberContext.Provider value={orderNumber}>
         <div className={styles['app-hidden']}>
           {isModalOpen && (
@@ -103,6 +97,7 @@ function App() {
               )}
             </Modal>
           )}
+          <Loading />
         </div>
       </OrderNumberContext.Provider>
     </div>

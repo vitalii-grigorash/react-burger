@@ -1,11 +1,12 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import styles from './burger-constructor.module.css';
 import PropTypes from 'prop-types';
 import { ConstructorElement, DragIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useEffect, useState } from 'react';
-import { IngredientsContext } from '../../services/ingredientsContext';
 import { TotalPriceContext } from '../../services/totalPriceContext';
 import currencyIcon from '../../images/currency-icon.svg';
+import { useSelector } from 'react-redux';
+import { getIngredients } from '../../services/burger-ingredients/selectors';
 
 function BurgerConstructor(props) {
 
@@ -13,7 +14,7 @@ function BurgerConstructor(props) {
         createNewOrder
     } = props;
 
-    const ingredients = useContext(IngredientsContext);
+    const ingredients = useSelector(getIngredients);
 
     const { priceState, priceDispatcher } = useContext(TotalPriceContext);
 
@@ -21,51 +22,35 @@ function BurgerConstructor(props) {
     const [selectedBun, setSelectedBun] = useState({});
     const [allPrices, setAllPrices] = useState([]);
 
-    // Пока на данном этапе у нас нет возможности выбрать bun или ингридиенты (как я понял)
-    // Получаем первый[0] элемент массива bun
-    // и все ингридиенты из ingredients добавляем в массив для визуализации
-    // потом внести тут изменения когда появится DnD и Redux
-
     useEffect(() => {
         if (ingredients.length !== 0) {
 
-            // Отделяем булки от остальных ингредиентов
             const allIngredients = ingredients.filter(ingredient => ingredient.type !== "bun")
             const allBuns = ingredients.filter(ingredient => ingredient.type === "bun")
             setSelectedIngredients(allIngredients)
             setSelectedBun(allBuns[0]);
 
-            // Складываем все цены выбранных ингридиентов в отдельный массив
             const pricesArr = allIngredients.map(ingredient => ingredient.price);
 
-            // Добавляем цены двух булок (верх и низ)
             pricesArr.push(allBuns[0].price);
             pricesArr.push(allBuns[0].price);
 
             setAllPrices(pricesArr);
         }
     }, [ingredients])
-    // ----------------------------------------------------------------------------------
 
-    // Пока у нас нет логики добавлять и удалять ингредиенты по одному
-    // Поэтому методом forEach пройдёмся по всему массиву ингридиентов и подсчитаем общую стоимотсть
-    // Внести тут изменения, когда появится DnD и Redux
     useEffect(() => {
-        // При ререндере компонента сбрасываем стейт, что бы корректо считалось
         priceDispatcher({ type: 'reset' });
         if (allPrices.length !== 0) {
             allPrices.forEach(price => {
-                // Вызываем priceDispatcher для каждого элемента массива
                 priceDispatcher({ type: 'increment', payload: price });
             })
         }
     }, [allPrices, priceDispatcher])
 
     function onOrderButtonClick() {
-        // Дабавляем массив из _id выбранных ингредиентов
         const allIngredientsId = selectedIngredients.map(ingredient => ingredient._id);
-        // Пока не понятно, надо ли добавлять два одинаковых _id булок в запрос или достаточно одного
-        // Пока добавим один _id
+        allIngredientsId.push(selectedBun._id);
         allIngredientsId.push(selectedBun._id);
 
         const data = {
@@ -77,7 +62,6 @@ function BurgerConstructor(props) {
 
     return (
         <section className={styles['burger-constructor']}>
-            {/* Если данные не успели подготовиться, делаем проверку, что бы не сломалось */}
             {selectedIngredients.length !== 0 && (
                 <>
                     <div className={styles['bun-container']}>
@@ -89,7 +73,6 @@ function BurgerConstructor(props) {
                             thumbnail={selectedBun.image}
                         />
                     </div>
-                    {/* Возможно, есть смысл вынести в отдельный копонент */}
                     <ul className={styles['constructor-container']}>
                         {selectedIngredients.map((item) => (
                             <li key={item._id} className={styles['topping-container']}>
@@ -104,7 +87,6 @@ function BurgerConstructor(props) {
                             </li>
                         ))}
                     </ul>
-                    {/* ------------------------------------------------- */}
                     <div className={styles['bun-container']}>
                         <ConstructorElement
                             type="bottom"
