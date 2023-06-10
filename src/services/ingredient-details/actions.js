@@ -1,19 +1,14 @@
-import { OPEN_INGREDIENT_DETAILS, OPEN_ORDER_DETAILS, CLOSE_MODAL } from './types';
+import { ADD_MODAL_INGREDIENT_DETAILS, DELETE_MODAL_INGREDIENT_DETAILS } from './types';
 
-export function showIngredientDetails() {
+export function addIngredientDetails(ingredient) {
     return {
-        type: OPEN_INGREDIENT_DETAILS
+        type: ADD_MODAL_INGREDIENT_DETAILS,
+        payload: ingredient
     }
 }
 
-export function showOrderDetails() {
+export function deleteIngredientDetails() {
     return {
-        type: OPEN_ORDER_DETAILS
-    }
-}
-
-export function closeModal() {
-    return {
-        type: CLOSE_MODAL
+        type: DELETE_MODAL_INGREDIENT_DETAILS
     }
 }

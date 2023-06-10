@@ -1,20 +1,18 @@
 import { useContext } from 'react';
 import styles from './burger-constructor.module.css';
-import PropTypes from 'prop-types';
 import { ConstructorElement, DragIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useEffect, useState } from 'react';
 import { TotalPriceContext } from '../../services/totalPriceContext';
 import currencyIcon from '../../images/currency-icon.svg';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getIngredients } from '../../services/burger-ingredients/selectors';
+import { createOrder } from '../../services/order-details/actions';
 
-function BurgerConstructor(props) {
+function BurgerConstructor() {
 
-    const {
-        createNewOrder
-    } = props;
+    const dispatch = useDispatch();
 
-    const ingredients = useSelector(getIngredients);
+    const { bun, sauce, topping } = useSelector(getIngredients);
 
     const { priceState, priceDispatcher } = useContext(TotalPriceContext);
 
@@ -23,21 +21,22 @@ function BurgerConstructor(props) {
     const [allPrices, setAllPrices] = useState([]);
 
     useEffect(() => {
-        if (ingredients.length !== 0) {
 
-            const allIngredients = ingredients.filter(ingredient => ingredient.type !== "bun")
-            const allBuns = ingredients.filter(ingredient => ingredient.type === "bun")
+        if (bun.length !== 0) {
+            const allIngredients = sauce.concat(topping);
+
             setSelectedIngredients(allIngredients)
-            setSelectedBun(allBuns[0]);
+            setSelectedBun(bun[0]);
 
             const pricesArr = allIngredients.map(ingredient => ingredient.price);
 
-            pricesArr.push(allBuns[0].price);
-            pricesArr.push(allBuns[0].price);
+            pricesArr.push(bun[0].price);
+            pricesArr.push(bun[0].price);
 
             setAllPrices(pricesArr);
         }
-    }, [ingredients])
+
+    }, [bun, sauce, topping])
 
     useEffect(() => {
         priceDispatcher({ type: 'reset' });
@@ -57,7 +56,7 @@ function BurgerConstructor(props) {
             ingredients: allIngredientsId
         }
 
-        createNewOrder(data);
+        dispatch(createOrder(data));
     }
 
     return (
@@ -112,7 +111,3 @@ function BurgerConstructor(props) {
 }
 
 export default BurgerConstructor;
-
-BurgerConstructor.propTypes = {
-    createNewOrder: PropTypes.func
-};

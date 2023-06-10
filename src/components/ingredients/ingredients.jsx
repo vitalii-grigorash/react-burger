@@ -8,7 +8,6 @@ function Ingredients(props) {
     const {
         heading,
         data,
-        openModal
     } = props;
 
     return (
@@ -17,11 +16,10 @@ function Ingredients(props) {
             <div className={styles['grid-container']}>
                 {data.length !== 0 && (
                     <>
-                        {data.map((item) => (
+                        {data.map((ingredient) => (
                             <Ingredient
-                                key={item._id}
-                                item={item}
-                                openModal={openModal}
+                                key={ingredient._id}
+                                ingredient={ingredient}
                             />
                         ))}
                     </>
@@ -35,6 +33,5 @@ export default Ingredients;
 
 Ingredients.propTypes = {
     heading: PropTypes.string,
-    data: PropTypes.arrayOf(ingredientsPropTypes.isRequired).isRequired,
-    openModal: PropTypes.func
+    data: PropTypes.arrayOf(ingredientsPropTypes.isRequired).isRequired
 };

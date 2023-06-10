@@ -1,15 +1,15 @@
-import { useContext } from 'react';
 import styles from './order-details.module.css';
 import doneIcon from '../../images/done-icon.svg';
-import { OrderNumberContext } from '../../services/orderNumberContext';
+import { getOrderDetails } from '../../services/order-details/selectors';
+import { useSelector } from 'react-redux';
 
 function OrderDetails() {
 
-    const number = useContext(OrderNumberContext);
+    const { orderNumber } = useSelector(getOrderDetails);
 
     return (
         <div className={styles['order-details']}>
-            <p className={styles['order-number']}>{number}</p>
+            <p className={styles['order-number']}>{orderNumber}</p>
             <p className={styles['identifier-text']}>идентификатор заказа</p>
             <img src={doneIcon} alt="Иконка созданного заказа" className={styles['done-icon']} />
             <p className={styles['start-text']}>Ваш заказ начали готовить</p>

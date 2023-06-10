@@ -1,30 +1,34 @@
 import styles from './ingredient.module.css';
 import { ingredientsPropTypes } from '../../utils/types';
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
-import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { showIngredientDetails } from '../../services/modal/actions';
+import { addIngredientDetails } from '../../services/ingredient-details/actions';
 
 function Ingredient(props) {
 
     const {
-        item,
-        openModal
+        ingredient,
     } = props;
 
-    function showIngredientDetails() {
-        openModal(false, item);
+    const dispatch = useDispatch();
+
+    function onIngredientClick() {
+        dispatch(addIngredientDetails(ingredient));
+        dispatch(showIngredientDetails('Детали ингредиента'));
     }
 
     return (
-        <section className={styles.ingredient} onClick={showIngredientDetails}>
+        <section className={styles.ingredient} onClick={onIngredientClick}>
             <div className={styles['counter-container']}>
                 <Counter count={1} size="default" extraClass="m-0" />
             </div>
-            <img className={styles.picture} src={item.image} alt="icon" />
+            <img className={styles.picture} src={ingredient.image} alt="icon" />
             <div className={styles['price-container']}>
-                <p className={styles.price}>{item.price}</p>
+                <p className={styles.price}>{ingredient.price}</p>
                 <CurrencyIcon type="primary" />
             </div>
-            <p className={styles['item-name']}>{item.name}</p>
+            <p className={styles['item-name']}>{ingredient.name}</p>
         </section>
     );
 }
@@ -32,6 +36,5 @@ function Ingredient(props) {
 export default Ingredient;
 
 Ingredient.propTypes = {
-    item: ingredientsPropTypes.isRequired,
-    openModal: PropTypes.func
+    ingredient: ingredientsPropTypes.isRequired
 };

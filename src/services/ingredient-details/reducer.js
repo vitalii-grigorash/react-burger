@@ -1,28 +1,20 @@
-import { OPEN_INGREDIENT_DETAILS, OPEN_ORDER_DETAILS, CLOSE_MODAL } from './types';
+import { ADD_MODAL_INGREDIENT_DETAILS, DELETE_MODAL_INGREDIENT_DETAILS } from './types';
 
 const initialState = {
-    isModalOpen: false,
-    isOrderModalOpen: false
+    ingredient: null
 }
 
 export const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case OPEN_ORDER_DETAILS:
+        case ADD_MODAL_INGREDIENT_DETAILS:
             return {
                 ...state,
-                isModalOpen: true,
-                isOrderModalOpen: true,
+                ingredient: action.payload
             };
-        case OPEN_INGREDIENT_DETAILS:
+        case DELETE_MODAL_INGREDIENT_DETAILS:
             return {
                 ...state,
-                isModalOpen: true
-            };
-        case CLOSE_MODAL:
-            return {
-                ...state,
-                isModalOpen: false,
-                isOrderModalOpen: false,
+                ingredient: null
             };
         default:
             return state;

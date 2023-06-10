@@ -1,45 +1,14 @@
-import { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import { useState } from 'react';
 import styles from './burger-ingredients.module.css';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import Ingredients from '../ingredients/ingredients';
 import { useSelector } from 'react-redux';
 import { getIngredients } from '../../services/burger-ingredients/selectors';
 
-function BurgerIngredients(props) {
+function BurgerIngredients() {
 
-    const {
-        openModal
-    } = props;
-
-    const ingredients = useSelector(getIngredients);
-    const [bun, setBun] = useState([]);
-    const [sauce, setSauce] = useState([]);
-    const [topping, setTopping] = useState([]);
+    const { bun, sauce, topping } = useSelector(getIngredients);
     const [current, setCurrent] = useState('bun');
-
-    // Разбиваем исходный массив на разные по типам
-    useEffect(() => {
-
-        const bunArr = [];
-        const sauceArr = [];
-        const toppingArr = [];
-
-        ingredients.forEach((i) => {
-            if (i.type === 'bun') {
-                bunArr.push(i);
-            } else if (i.type === 'sauce') {
-                sauceArr.push(i);
-            } else if (i.type === 'main') {
-                toppingArr.push(i);
-            }
-        });
-
-        setBun(bunArr);
-        setSauce(sauceArr);
-        setTopping(toppingArr);
-
-    }, [ingredients])
 
     // Какая-то логика в будущем при клике на вкладки
     function onBunTabClick() {
@@ -73,17 +42,14 @@ function BurgerIngredients(props) {
                 <Ingredients
                     heading='Булки'
                     data={bun}
-                    openModal={openModal}
                 />
                 <Ingredients
                     heading='Соусы'
                     data={sauce}
-                    openModal={openModal}
                 />
                 <Ingredients
                     heading='Начинки'
                     data={topping}
-                    openModal={openModal}
                 />
             </div>
         </section>
@@ -91,7 +57,3 @@ function BurgerIngredients(props) {
 }
 
 export default BurgerIngredients;
-
-BurgerIngredients.propTypes = {
-    openModal: PropTypes.func
-};

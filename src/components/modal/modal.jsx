@@ -4,15 +4,23 @@ import styles from './modal.module.css';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import PropTypes from 'prop-types';
 import { useCallback, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getModal } from '../../services/modal/selectors';
+import { closeModal } from '../../services/modal/actions';
 const modalRoot = document.getElementById("modal");
 
 function Modal(props) {
 
     const {
-        onClose,
-        title,
         children
     } = props;
+
+    const dispatch = useDispatch();
+    const { isModalOpen, isOrderModalOpen, modalTitle } = useSelector(getModal);
+
+    const onClose = useCallback(() => {
+        dispatch(closeModal(isOrderModalOpen));
+    }, [dispatch, isOrderModalOpen])
 
     const handleCloseModal = useCallback((e) => {
         if (e.key === 'Escape') {
@@ -29,18 +37,22 @@ function Modal(props) {
 
     return createPortal(
         <>
-            <div className={styles.modal}>
-                <div className={styles['modal-container']}>
-                    <div className={styles['modal-heading-container']}>
-                        <h2 className={styles['modal-heading']}>{title}</h2>
-                        <div className={styles['close-button-container']} onClick={onClose}>
-                            <CloseIcon type="primary" />
+            {isModalOpen && (
+                <>
+                    <div className={styles.modal}>
+                        <div className={styles['modal-container']}>
+                            <div className={styles['modal-heading-container']}>
+                                <h2 className={styles['modal-heading']}>{modalTitle}</h2>
+                                <div className={styles['close-button-container']} onClick={onClose}>
+                                    <CloseIcon type="primary" />
+                                </div>
+                            </div>
+                            {children}
                         </div>
                     </div>
-                    {children}
-                </div>
-            </div>
-            <ModalOverlay onClose={onClose} />
+                    <ModalOverlay onClose={onClose} />
+                </>
+            )}
         </>,
         modalRoot
     )
@@ -49,7 +61,5 @@ function Modal(props) {
 export default Modal;
 
 Modal.propTypes = {
-    onClose: PropTypes.func,
-    isOrderOpen: PropTypes.bool,
     children: PropTypes.element
 };

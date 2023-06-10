@@ -1,7 +1,9 @@
 import { LOAD_INGREDIENTS_SUCCESS, LOAD_INGREDIENTS_ERROR } from './types';
 
 const initialState = {
-    ingredients: []
+    bun: [],
+    sauce: [],
+    topping: []
 }
 
 export const reducer = (state = initialState, action) => {
@@ -9,12 +11,16 @@ export const reducer = (state = initialState, action) => {
         case LOAD_INGREDIENTS_SUCCESS:
             return {
                 ...state,
-                ingredients: action.payload,
+                bun: action.payload.bun,
+                sauce: action.payload.sauce,
+                topping: action.payload.topping
             };
         case LOAD_INGREDIENTS_ERROR:
             return {
                 ...state,
-                ingredients: [],
+                bun: [],
+                sauce: [],
+                topping: []
             };
         default:
             return state;
