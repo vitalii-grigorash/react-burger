@@ -1,5 +1,6 @@
 import { loaderOn, loaderOff, errorOn } from '../loading/actions';
 import { showOrderDetails } from '../modal/actions';
+import { resetIngredients } from '../burger-constructor/actions';
 import { ORDER_REQUEST_SUCCESS, ORDER_REQUEST_ERROR } from './types';
 import * as Api from '../../utils/api';
 
@@ -25,6 +26,7 @@ export function createOrder(data) {
                 dispatch(addOrderDetails(res.order.number))
                 dispatch(loaderOff());
                 dispatch(showOrderDetails());
+                dispatch(resetIngredients());
             })
             .catch((err) => {
                 dispatch(errorOn(`Ошибка: ${err}`));

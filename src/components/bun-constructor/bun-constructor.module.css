@@ -1,0 +1,24 @@
+.bun-constructor {
+    display: flex;
+    margin: 0 16px 0 auto;
+}
+.default-container-top {
+    display: flex;
+    width: 536px;
+    height: 80px;
+    background: #1C1C21;
+    border-radius: 88px 88px 40px 40px;
+}
+.default-container-bottom {
+    composes: default-container-top;
+    border-radius: 40px 40px 88px 88px;
+}
+.default-container-text {
+    font-family: 'JetBrains Mono', Arial, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: #F2F2F3;
+    margin: auto;
+}

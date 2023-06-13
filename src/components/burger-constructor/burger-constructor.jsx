@@ -1,111 +1,83 @@
-import { useContext } from 'react';
 import styles from './burger-constructor.module.css';
-import { ConstructorElement, DragIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useEffect, useState } from 'react';
-import { TotalPriceContext } from '../../services/totalPriceContext';
-import currencyIcon from '../../images/currency-icon.svg';
-import { useDispatch, useSelector } from 'react-redux';
-import { getIngredients } from '../../services/burger-ingredients/selectors';
-import { createOrder } from '../../services/order-details/actions';
+import update from "immutability-helper";
+import BunConstructor from '../bun-constructor/bun-constructor';
+import IngredientConstructor from '../ingredient-constructor/ingredient-constructor';
+import OrderButton from '../order-button/order-button';
+import { useSelector, useDispatch } from 'react-redux';
+import { useDrop } from 'react-dnd';
+import { selectBun, addIngredient, sortIngredients } from '../../services/burger-constructor/actions';
+import { getConstructor } from '../../services/burger-constructor/selectors';
+import uniqid from 'uniqid';
+import { useCallback } from 'react';
 
 function BurgerConstructor() {
 
     const dispatch = useDispatch();
 
-    const { bun, sauce, topping } = useSelector(getIngredients);
+    const { ingredients } = useSelector(getConstructor);
 
-    const { priceState, priceDispatcher } = useContext(TotalPriceContext);
-
-    const [selectedIngredients, setSelectedIngredients] = useState([]);
-    const [selectedBun, setSelectedBun] = useState({});
-    const [allPrices, setAllPrices] = useState([]);
-
-    useEffect(() => {
-
-        if (bun.length !== 0) {
-            const allIngredients = sauce.concat(topping);
-
-            setSelectedIngredients(allIngredients)
-            setSelectedBun(bun[0]);
-
-            const pricesArr = allIngredients.map(ingredient => ingredient.price);
-
-            pricesArr.push(bun[0].price);
-            pricesArr.push(bun[0].price);
-
-            setAllPrices(pricesArr);
+    function addNewIngredient(ingredient) {
+        ingredient.uniqKey = uniqid();
+        if (ingredient.type === 'bun') {
+            dispatch(selectBun(ingredient));
+        } else {
+            dispatch(addIngredient(ingredient));
         }
-
-    }, [bun, sauce, topping])
-
-    useEffect(() => {
-        priceDispatcher({ type: 'reset' });
-        if (allPrices.length !== 0) {
-            allPrices.forEach(price => {
-                priceDispatcher({ type: 'increment', payload: price });
-            })
-        }
-    }, [allPrices, priceDispatcher])
-
-    function onOrderButtonClick() {
-        const allIngredientsId = selectedIngredients.map(ingredient => ingredient._id);
-        allIngredientsId.push(selectedBun._id);
-        allIngredientsId.push(selectedBun._id);
-
-        const data = {
-            ingredients: allIngredientsId
-        }
-
-        dispatch(createOrder(data));
     }
 
+    const [{ isHover }, drop] = useDrop({
+        accept: 'ingredient',
+        collect: monitor => ({
+            isHover: monitor.isOver(),
+        }),
+        drop(ingredient) {
+            addNewIngredient({ ...ingredient });
+        },
+    });
+
+    const moveCard = useCallback((dragIndex, hoverIndex) => {
+        const sortedIngredients = () => update(ingredients, {
+            $splice: [
+                [dragIndex, 1],
+                [hoverIndex, 0, ingredients[dragIndex]]
+            ]
+        })
+        const newSortedIngredients = sortedIngredients();
+        dispatch(sortIngredients(newSortedIngredients));
+    }, [dispatch, ingredients]);
+
     return (
-        <section className={styles['burger-constructor']}>
-            {selectedIngredients.length !== 0 && (
-                <>
-                    <div className={styles['bun-container']}>
-                        <ConstructorElement
-                            type="top"
-                            isLocked={true}
-                            text={`${selectedBun.name} (верх)`}
-                            price={selectedBun.price}
-                            thumbnail={selectedBun.image}
-                        />
+        <section ref={drop} className={styles['burger-constructor']}>
+            <BunConstructor
+                type="top"
+                text="(верх)"
+            />
+            <ul className={styles[`${ingredients.length !== 0 ? 'constructor-container' : 'constructor-default-container'}`]}>
+                {ingredients.length !== 0 ? (
+                    <>
+                        {
+                            ingredients.map((ingredient, index) => (
+                                <IngredientConstructor
+                                    key={ingredient.uniqKey}
+                                    ingredient={ingredient}
+                                    index={index}
+                                    moveCard={moveCard}
+                                    uniqKey={ingredient.uniqKey}
+                                />
+                            ))
+                        }
+                    </>
+                ) : (
+                    <div className={styles['default-container']}>
+                        <p className={styles['default-container-text']}>Добавьте ингредиент</p>
                     </div>
-                    <ul className={styles['constructor-container']}>
-                        {selectedIngredients.map((item) => (
-                            <li key={item._id} className={styles['topping-container']}>
-                                <DragIcon type="primary" />
-                                <div className={styles['item-container']}>
-                                    <ConstructorElement
-                                        text={item.name}
-                                        price={item.price}
-                                        thumbnail={item.image}
-                                    />
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
-                    <div className={styles['bun-container']}>
-                        <ConstructorElement
-                            type="bottom"
-                            isLocked={true}
-                            text={`${selectedBun.name} (низ)`}
-                            price={selectedBun.price}
-                            thumbnail={selectedBun.image}
-                        />
-                    </div>
-                    <div className={styles['button-container']}>
-                        <div className={styles['total-price-container']}>
-                            <p className={styles['total-price']}>{priceState.price}</p>
-                            <img className={styles['currency-icon']} src={currencyIcon} alt="Иконка большая" />
-                        </div>
-                        <Button htmlType="button" type="primary" size="large" onClick={onOrderButtonClick}>
-                            Оформить заказ
-                        </Button>
-                    </div>
-                </>
-            )}
+                )}
+            </ul>
+            <BunConstructor
+                type="bottom"
+                text="(низ)"
+            />
+            <OrderButton />
         </section>
     );
 }

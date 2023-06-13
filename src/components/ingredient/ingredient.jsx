@@ -1,9 +1,12 @@
 import styles from './ingredient.module.css';
 import { ingredientsPropTypes } from '../../utils/types';
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { showIngredientDetails } from '../../services/modal/actions';
 import { addIngredientDetails } from '../../services/ingredient-details/actions';
+import { useDrag } from 'react-dnd';
+import { useEffect, useState } from 'react';
+import { getConstructor } from '../../services/burger-constructor/selectors';
 
 function Ingredient(props) {
 
@@ -12,6 +15,41 @@ function Ingredient(props) {
     } = props;
 
     const dispatch = useDispatch();
+    const { bun, ingredients } = useSelector(getConstructor);
+    const [ingredientCount, setIngredientCount] = useState(null);
+
+    useEffect(() => {
+        if (ingredient.type === 'bun') {
+            if (bun) {
+                if (bun._id === ingredient._id) {
+                    setIngredientCount(1);
+                } else {
+                    setIngredientCount(null);
+                }
+            } else {
+                setIngredientCount(null);
+            }
+        } else {
+            if (ingredients.length !== 0) {
+                const currentIngredient = ingredients.filter(constructorIngredient => constructorIngredient._id === ingredient._id);
+                if (currentIngredient.length !== 0) {
+                    setIngredientCount(currentIngredient.length);
+                } else {
+                    setIngredientCount(null);
+                }
+            } else {
+                setIngredientCount(null);
+            }
+        }
+    }, [bun, ingredients, ingredient])
+
+    const [{ isDragging }, ref] = useDrag({
+        type: 'ingredient',
+        item: ingredient,
+        collect: (monitor) => ({
+            isDragging: monitor.isDragging()
+        })
+    });
 
     function onIngredientClick() {
         dispatch(addIngredientDetails(ingredient));
@@ -19,10 +57,12 @@ function Ingredient(props) {
     }
 
     return (
-        <section className={styles.ingredient} onClick={onIngredientClick}>
-            <div className={styles['counter-container']}>
-                <Counter count={1} size="default" extraClass="m-0" />
-            </div>
+        <section ref={ref} className={styles[`${isDragging ? 'ingredient-dragging' : 'ingredient'}`]} onClick={onIngredientClick}>
+            {ingredientCount && (
+                <div className={styles['counter-container']}>
+                    <Counter count={ingredientCount} size="default" extraClass="m-0" />
+                </div>
+            )}
             <img className={styles.picture} src={ingredient.image} alt="icon" />
             <div className={styles['price-container']}>
                 <p className={styles.price}>{ingredient.price}</p>

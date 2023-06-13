@@ -1,0 +1,1 @@
+export const getTotalPrice = (store) => store.totalPrice;

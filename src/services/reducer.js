@@ -4,6 +4,8 @@ import { reducer as loadingReducer } from './loading/reducer';
 import { reducer as modalReducer } from './modal/reducer';
 import { reducer as ingredientDetailsReducer } from './ingredient-details/reducer';
 import { reducer as orderDetailsReducer } from './order-details/reducer';
+import { reducer as burgerConstructorReducer } from './burger-constructor/reducer';
+import { reducer as totalPriceReducer } from './total-price/reducer';
 
 export const rootReducer = combineReducers({
     burgerIngredients: burgerIngredientsReducer,
@@ -11,4 +13,6 @@ export const rootReducer = combineReducers({
     modal: modalReducer,
     ingredientDetails: ingredientDetailsReducer,
     orderDetails: orderDetailsReducer,
+    burgerConstructor: burgerConstructorReducer,
+    totalPrice: totalPriceReducer,
 }) 

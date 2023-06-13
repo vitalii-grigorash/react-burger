@@ -4,10 +4,6 @@
     gap: 10px;
     margin: 100px 0 auto 0;
 }
-.bun-container {
-    display: flex;
-    margin: 0 16px 0 auto;
-}
 .constructor-container {
     display: flex;
     flex-direction: column;
@@ -23,35 +19,27 @@
 .constructor-container::-webkit-scrollbar-thumb {
     background: #8585AD;
 }
-.topping-container {
+.constructor-default-container {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 444px;
+    margin: 0;
 }
-.item-container {
+.default-container {
     display: flex;
-    margin: 0 8px;
-    width: 100%;
+    width: 536px;
+    height: 80px;
+    background: #1C1C21;
+    border-radius: 40px;
+    margin: 0 16px;
 }
-.button-container {
-    display: flex;
-    margin: 30px 0 0 auto;
-    align-items: center;
-}
-.total-price-container {
-    display: flex;
-    align-items: center;
-    margin: auto 40px auto 0;
-}
-.total-price {
-    font-family: 'Iceland', Arial, sans-serif;
+.default-container-text {
+    font-family: 'JetBrains Mono', Arial, sans-serif;
     font-style: normal;
     font-weight: 400;
-    font-size: 48px;
-    line-height: 36px;
-    margin: auto 8px auto 0;
-}
-.currency-icon {
-    width: 36px;
-    height: 36px;
-    margin: 0;
+    font-size: 16px;
+    line-height: 24px;
+    color: #F2F2F3;
+    margin: auto;
 }
