@@ -4,23 +4,18 @@ import styles from './modal.module.css';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import PropTypes from 'prop-types';
 import { useCallback, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { getModal } from '../../services/modal/selectors';
-import { closeModal } from '../../services/modal/actions';
 const modalRoot = document.getElementById("modal");
 
 function Modal(props) {
 
     const {
-        children
+        children,
+        onClose
     } = props;
 
-    const dispatch = useDispatch();
-    const { isModalOpen, isIngredientModalOpen, isErrorModalOpen, modalTitle } = useSelector(getModal);
-
-    const onClose = useCallback(() => {
-        dispatch(closeModal(isIngredientModalOpen, isErrorModalOpen));
-    }, [dispatch, isIngredientModalOpen, isErrorModalOpen])
+    const { isModalOpen, modalTitle } = useSelector(getModal);
 
     const handleCloseModal = useCallback((e) => {
         if (e.key === 'Escape') {
@@ -61,5 +56,6 @@ function Modal(props) {
 export default Modal;
 
 Modal.propTypes = {
-    children: PropTypes.element
+    children: PropTypes.element,
+    onClose: PropTypes.func
 };
