@@ -16,11 +16,11 @@ function Modal(props) {
     } = props;
 
     const dispatch = useDispatch();
-    const { isModalOpen, isOrderModalOpen, modalTitle } = useSelector(getModal);
+    const { isModalOpen, isIngredientModalOpen, isErrorModalOpen, modalTitle } = useSelector(getModal);
 
     const onClose = useCallback(() => {
-        dispatch(closeModal(isOrderModalOpen));
-    }, [dispatch, isOrderModalOpen])
+        dispatch(closeModal(isIngredientModalOpen, isErrorModalOpen));
+    }, [dispatch, isIngredientModalOpen, isErrorModalOpen])
 
     const handleCloseModal = useCallback((e) => {
         if (e.key === 'Escape') {

@@ -25,11 +25,8 @@ function BurgerConstructor() {
         }
     }
 
-    const [{ isHover }, drop] = useDrop({
+    const [, dropRef] = useDrop({
         accept: 'ingredient',
-        collect: monitor => ({
-            isHover: monitor.isOver(),
-        }),
         drop(ingredient) {
             addNewIngredient({ ...ingredient });
         },
@@ -47,7 +44,7 @@ function BurgerConstructor() {
     }, [dispatch, ingredients]);
 
     return (
-        <section ref={drop} className={styles['burger-constructor']}>
+        <section ref={dropRef} className={styles['burger-constructor']}>
             <BunConstructor
                 type="top"
                 text="(верх)"

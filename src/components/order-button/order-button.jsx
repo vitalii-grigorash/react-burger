@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getConstructor } from '../../services/burger-constructor/selectors';
 import { getTotalPrice } from '../../services/total-price/selectors';
 import { incrementPrice, resetPrice } from '../../services/total-price/actions';
+import { errorOn } from '../../services/loading/actions';
+import { showErrorDetails } from '../../services/modal/actions';
 import { createOrder } from '../../services/order-details/actions';
 
 function OrderButton() {
@@ -35,19 +37,20 @@ function OrderButton() {
     }, [bun, ingredients, dispatch])
 
     function onOrderButtonClick() {
-        const ingredientsId = [];
-        if (ingredients.length !== 0) {
+        if (bun && ingredients.length !== 0) {
+            const ingredientsId = [];
             ingredients.forEach((ingredient) => {
                 ingredientsId.push(ingredient._id);
             })
-        }
-        if (bun) {
             ingredientsId.push(bun._id);
+            const data = {
+                ingredients: ingredientsId
+            }
+            dispatch(createOrder(data));
+        } else {
+            dispatch(errorOn(`${!bun ? 'Необходимо выбрать булку' : 'Необходимо добавить ингредиент'}`));
+            dispatch(showErrorDetails('Ошибка оформления заказа'));
         }
-        const data = {
-            ingredients: ingredientsId
-        }
-        dispatch(createOrder(data));
     }
 
     return (

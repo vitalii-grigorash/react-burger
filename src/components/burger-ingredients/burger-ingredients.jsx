@@ -15,6 +15,18 @@ function BurgerIngredients() {
     const toppingRef = useRef(null);
     const tabsRef = useRef(null);
 
+    function onBunTabClick() {
+        bunRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+
+    function onSauceTabClick() {
+        sauceRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+
+    function onToppingTabClick() {
+        toppingRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+
     function getDiff(a, b) {
         return Math.abs(a - b);
     }
@@ -42,13 +54,13 @@ function BurgerIngredients() {
         <section className={styles['burger-ingredients']}>
             <h1 className={styles.heading}>Соберите бургер</h1>
             <div ref={tabsRef} className={styles['tabs-container']}>
-                <Tab value="bun" active={current === 'bun'}>
+                <Tab value="bun" active={current === 'bun'} onClick={onBunTabClick}>
                     Булки
                 </Tab>
-                <Tab value="sauce" active={current === 'sauce'}>
+                <Tab value="sauce" active={current === 'sauce'} onClick={onSauceTabClick}>
                     Соусы
                 </Tab>
-                <Tab value="topping" active={current === 'topping'}>
+                <Tab value="topping" active={current === 'topping'} onClick={onToppingTabClick}>
                     Начинки
                 </Tab>
             </div>

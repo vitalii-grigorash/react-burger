@@ -1,4 +1,4 @@
-import { LOADER_ON, LOADER_OFF, ERROR_ACTIVE } from "./types";
+import { LOADER_ON, LOADER_OFF, ERROR_ACTIVE, ERROR_DISABLE } from "./types";
 
 export function loaderOn() {
     return {
@@ -16,5 +16,11 @@ export function errorOn(text) {
     return {
         type: ERROR_ACTIVE,
         payload: text
+    }
+}
+
+export function errorOff() {
+    return {
+        type: ERROR_DISABLE
     }
 }

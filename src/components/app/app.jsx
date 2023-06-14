@@ -5,6 +5,7 @@ import Main from '../main/main';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import IngredientDetails from '../ingredient-details/ingredient-details';
+import ErrorDetails from '../error-details/error-details';
 import { loadIngredients } from '../../services/burger-ingredients/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { getModal } from '../../services/modal/selectors';
@@ -15,7 +16,7 @@ import Loading from '../loading/loading';
 function App() {
 
   const dispatch = useDispatch();
-  const { isOrderModalOpen } = useSelector(getModal);
+  const { isOrderModalOpen, isIngredientModalOpen, isErrorModalOpen } = useSelector(getModal);
 
   useEffect(() => {
     dispatch(loadIngredients());
@@ -29,11 +30,17 @@ function App() {
       </DndProvider>
       <div className={styles['app-hidden']}>
         <Modal>
-          {isOrderModalOpen ? (
-            <OrderDetails />
-          ) : (
-            <IngredientDetails />
-          )}
+          <>
+            {isOrderModalOpen && (
+              <OrderDetails />
+            )}
+            {isIngredientModalOpen && (
+              <IngredientDetails />
+            )}
+            {isErrorModalOpen && (
+              <ErrorDetails />
+            )}
+          </>
         </Modal>
         <Loading />
       </div>

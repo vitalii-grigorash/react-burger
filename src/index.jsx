@@ -6,7 +6,7 @@ import './index.css';
 import { legacy_createStore as createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
-import { rootReducer } from './services/reducer';
+import { rootReducer } from './services';
 
 const composeEnhancers =
   typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__

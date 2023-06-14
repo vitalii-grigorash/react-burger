@@ -1,4 +1,5 @@
 import { loaderOn, loaderOff, errorOn } from '../loading/actions';
+import { showErrorDetails } from '../modal/actions';
 import { LOAD_INGREDIENTS_SUCCESS, LOAD_INGREDIENTS_ERROR } from './types';
 import * as Api from '../../utils/api';
 
@@ -43,8 +44,9 @@ export function loadIngredients() {
                 dispatch(loaderOff());
             })
             .catch((err) => {
-                dispatch(errorOn(`Ошибка: ${err}`));
+                dispatch(errorOn(`Ошибка: ${err}. Попробуйте еще раз...`));
                 dispatch(loaderOff());
+                dispatch(showErrorDetails('Ошибка при запросе'));
                 dispatch(loadingError());
             })
     }

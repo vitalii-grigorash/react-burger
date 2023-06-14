@@ -1,5 +1,7 @@
 import styles from './ingredient-constructor.module.css';
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import PropTypes from 'prop-types';
+import { ingredientsPropTypes } from '../../utils/types';
 import { useDispatch } from 'react-redux';
 import { deleteIngredient } from '../../services/burger-constructor/actions';
 import { useRef } from 'react';
@@ -83,3 +85,10 @@ function IngredientConstructor(props) {
 }
 
 export default IngredientConstructor;
+
+IngredientConstructor.propTypes = {
+    ingredient: ingredientsPropTypes.isRequired,
+    index: PropTypes.number,
+    moveCard: PropTypes.func,
+    uniqKey: PropTypes.string
+};

@@ -1,4 +1,4 @@
-import { LOADER_ON, LOADER_OFF, ERROR_ACTIVE } from "./types";
+import { LOADER_ON, LOADER_OFF, ERROR_ACTIVE, ERROR_DISABLE } from "./types";
 
 const initialState = {
     loading: false,
@@ -10,8 +10,7 @@ export const reducer = (state = initialState, action) => {
         case LOADER_ON:
             return {
                 ...state,
-                loading: true,
-                error: null
+                loading: true
             }
         case LOADER_OFF:
             return {
@@ -22,6 +21,11 @@ export const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 error: action.payload
+            }
+        case ERROR_DISABLE:
+            return {
+                ...state,
+                error: null
             }
         default:
             return state;
