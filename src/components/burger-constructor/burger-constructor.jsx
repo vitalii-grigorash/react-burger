@@ -1,107 +1,82 @@
 import styles from './burger-constructor.module.css';
-import PropTypes from 'prop-types';
-import { ConstructorElement, DragIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useEffect, useState } from 'react';
-import { ingredientsPropTypes } from '../../utils/types';
-import currencyIcon from '../../images/currency-icon.svg';
+import update from "immutability-helper";
+import BunConstructor from '../bun-constructor/bun-constructor';
+import IngredientConstructor from '../ingredient-constructor/ingredient-constructor';
+import OrderButton from '../order-button/order-button';
+import { useSelector, useDispatch } from 'react-redux';
+import { useDrop } from 'react-dnd';
+import { selectBun, addIngredient, sortIngredients } from '../../services/burger-constructor/actions';
+import { getConstructor } from '../../services/burger-constructor/selectors';
+import uniqid from 'uniqid';
+import { useCallback } from 'react';
 
-function BurgerConstructor(props) {
+function BurgerConstructor() {
 
-    const {
-        bun,
-        sauce,
-        topping,
-        openModal
-    } = props;
+    const dispatch = useDispatch();
 
-    const [selectedIngredients, setSelectedIngredients] = useState([]);
-    const [selectedBun, setSelectedBun] = useState({});
-    const [totalPrice, setTotalPrice] = useState(0);
+    const { ingredients } = useSelector(getConstructor);
 
-    // Пока на данном этапе у нас нет возможности выбрать bun или ингридиенты (как я понял)
-    // Получаем первый[0] элемент массива bun
-    // и все ингридиенты из data добавляем в массив для визуализации
-    // потом внести тут изменения
-    
-    useEffect(() => {
-        if (topping.length !== 0) {
-            const allIngredients = sauce.concat(topping);
-            setSelectedIngredients(allIngredients)
-            setSelectedBun(bun[0]);
-            // Складываем все цены выбранных ингридиентов в отдельный массив
-            const allPrices = allIngredients.map(ingredient => ingredient.price);
-            // Добавляем цену булок
-            // Не знаю, это цена за одну булку или за пару, пока представим, что за пару
-            allPrices.push(bun[0].price);
-            // Суммируем все цены и кладем в переменную
-            setTotalPrice(allPrices.reduce((a, b) => a + b));
+    function addNewIngredient(ingredient) {
+        ingredient.uniqKey = uniqid();
+        if (ingredient.type === 'bun') {
+            dispatch(selectBun(ingredient));
+        } else {
+            dispatch(addIngredient(ingredient));
         }
-    }, [bun, sauce, topping])
-    // ----------------------------------------------------------------------------------
-
-    function onOrderButtonClick () {
-        openModal(true);
     }
 
+    const [, dropRef] = useDrop({
+        accept: 'ingredient',
+        drop(ingredient) {
+            addNewIngredient({ ...ingredient });
+        },
+    });
+
+    const moveCard = useCallback((dragIndex, hoverIndex) => {
+        const sortedIngredients = () => update(ingredients, {
+            $splice: [
+                [dragIndex, 1],
+                [hoverIndex, 0, ingredients[dragIndex]]
+            ]
+        })
+        const newSortedIngredients = sortedIngredients();
+        dispatch(sortIngredients(newSortedIngredients));
+    }, [dispatch, ingredients]);
+
     return (
-        <section className={styles['burger-constructor']}>
-            {/* Если данные не успели подготовиться, делаем проверку, что бы не сломалось */}
-            {selectedIngredients.length !== 0 && (
-                <>
-                    <div className={styles['bun-container']}>
-                        <ConstructorElement
-                            type="top"
-                            isLocked={true}
-                            text={`${selectedBun.name} (верх)`}
-                            price={selectedBun.price}
-                            thumbnail={selectedBun.image}
-                        />
+        <section ref={dropRef} className={styles['burger-constructor']}>
+            <BunConstructor
+                type="top"
+                text="(верх)"
+            />
+            <ul className={styles[`${ingredients.length !== 0 ? 'constructor-container' : 'constructor-default-container'}`]}>
+                {ingredients.length !== 0 ? (
+                    <>
+                        {
+                            ingredients.map((ingredient, index) => (
+                                <IngredientConstructor
+                                    key={ingredient.uniqKey}
+                                    ingredient={ingredient}
+                                    index={index}
+                                    moveCard={moveCard}
+                                    uniqKey={ingredient.uniqKey}
+                                />
+                            ))
+                        }
+                    </>
+                ) : (
+                    <div className={styles['default-container']}>
+                        <p className={styles['default-container-text']}>Добавьте ингредиент</p>
                     </div>
-                    {/* Возможно, есть смысл вынести в отдельный копонент */}
-                    <ul className={styles['constructor-container']}>
-                        {selectedIngredients.map((item) => (
-                            <li key={item._id} className={styles['topping-container']}>
-                                <DragIcon type="primary" />
-                                <div className={styles['item-container']}>
-                                    <ConstructorElement
-                                        text={item.name}
-                                        price={item.price}
-                                        thumbnail={item.image}
-                                    />
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
-                    {/* ------------------------------------------------- */}
-                    <div className={styles['bun-container']}>
-                        <ConstructorElement
-                            type="bottom"
-                            isLocked={true}
-                            text={`${selectedBun.name} (низ)`}
-                            price={selectedBun.price}
-                            thumbnail={selectedBun.image}
-                        />
-                    </div>
-                    <div className={styles['button-container']}>
-                        <div className={styles['total-price-container']}>
-                            <p className={styles['total-price']}>{totalPrice}</p>
-                            <img className={styles['currency-icon']} src={currencyIcon} alt="Иконка большая" />
-                        </div>
-                        <Button htmlType="button" type="primary" size="large" onClick={onOrderButtonClick}>
-                            Оформить заказ
-                        </Button>
-                    </div>
-                </>
-            )}
+                )}
+            </ul>
+            <BunConstructor
+                type="bottom"
+                text="(низ)"
+            />
+            <OrderButton />
         </section>
     );
 }
 
 export default BurgerConstructor;
-
-BurgerConstructor.propTypes = {
-    bun: PropTypes.arrayOf(ingredientsPropTypes.isRequired).isRequired,
-    sauce: PropTypes.arrayOf(ingredientsPropTypes.isRequired).isRequired,
-    topping: PropTypes.arrayOf(ingredientsPropTypes.isRequired).isRequired,
-    openModal: PropTypes.func
-};

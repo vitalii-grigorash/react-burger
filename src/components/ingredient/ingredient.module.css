@@ -5,6 +5,11 @@
     width: 272px;
     height: 208px;
     cursor: pointer;
+    opacity: 1;
+}
+.ingredient-dragging {
+    composes: ingredient;
+    opacity: 0.5;
 }
 .counter-container {
     position: absolute;

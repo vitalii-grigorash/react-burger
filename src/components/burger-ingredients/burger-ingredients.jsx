@@ -1,39 +1,59 @@
-import { useState } from 'react';
-import PropTypes from 'prop-types';
+import { useState, useRef } from 'react';
 import styles from './burger-ingredients.module.css';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import Ingredients from '../ingredients/ingredients';
-import { ingredientsPropTypes } from '../../utils/types';
+import { useSelector } from 'react-redux';
+import { getIngredients } from '../../services/burger-ingredients/selectors';
 
-function BurgerIngredients(props) {
+function BurgerIngredients() {
 
-    const {
-        bun,
-        sauce,
-        topping,
-        openModal
-    } = props;
-
+    const { bun, sauce, topping } = useSelector(getIngredients);
     const [current, setCurrent] = useState('bun');
 
-    // Какая-то логика в будущем при клике на вкладки
+    const bunRef = useRef(null);
+    const sauceRef = useRef(null);
+    const toppingRef = useRef(null);
+    const tabsRef = useRef(null);
+
     function onBunTabClick() {
-        setCurrent('bun');
+        bunRef.current.scrollIntoView({ behavior: "smooth" });
     }
 
     function onSauceTabClick() {
-        setCurrent('sauce');
+        sauceRef.current.scrollIntoView({ behavior: "smooth" });
     }
 
     function onToppingTabClick() {
-        setCurrent('topping');
+        toppingRef.current.scrollIntoView({ behavior: "smooth" });
     }
-    // ----------------------------------------------
+
+    function getDiff(a, b) {
+        return Math.abs(a - b);
+    }
+
+    const handleScroll = () => {
+        const tabsBottom = tabsRef.current.getBoundingClientRect().bottom;
+        const bunTop = bunRef.current.getBoundingClientRect().top;
+        const sauceTop = sauceRef.current.getBoundingClientRect().top;
+        const toppingTop = toppingRef.current.getBoundingClientRect().top;
+
+        const bunDiff = getDiff(tabsBottom, bunTop);
+        const sauceDiff = getDiff(tabsBottom, sauceTop);
+        const toppingDiff = getDiff(tabsBottom, toppingTop);
+
+        if (bunDiff < sauceDiff && bunDiff < toppingDiff) {
+            setCurrent('bun');
+        } else if (sauceDiff < bunDiff && sauceDiff < toppingDiff) {
+            setCurrent('sauce');
+        } else if (toppingDiff < bunDiff && toppingDiff < sauceDiff) {
+            setCurrent('topping');
+        }
+    }
 
     return (
         <section className={styles['burger-ingredients']}>
             <h1 className={styles.heading}>Соберите бургер</h1>
-            <div style={{ display: 'flex', marginTop: 20 }}>
+            <div ref={tabsRef} className={styles['tabs-container']}>
                 <Tab value="bun" active={current === 'bun'} onClick={onBunTabClick}>
                     Булки
                 </Tab>
@@ -44,21 +64,21 @@ function BurgerIngredients(props) {
                     Начинки
                 </Tab>
             </div>
-            <div className={styles['ingredients-main-container']}>
+            <div id='scroll' onScroll={handleScroll} className={styles['ingredients-main-container']}>
                 <Ingredients
                     heading='Булки'
                     data={bun}
-                    openModal={openModal}
+                    ref={bunRef}
                 />
                 <Ingredients
                     heading='Соусы'
                     data={sauce}
-                    openModal={openModal}
+                    ref={sauceRef}
                 />
                 <Ingredients
                     heading='Начинки'
                     data={topping}
-                    openModal={openModal}
+                    ref={toppingRef}
                 />
             </div>
         </section>
@@ -66,10 +86,3 @@ function BurgerIngredients(props) {
 }
 
 export default BurgerIngredients;
-
-BurgerIngredients.propTypes = {
-    bun: PropTypes.arrayOf(ingredientsPropTypes.isRequired).isRequired,
-    sauce: PropTypes.arrayOf(ingredientsPropTypes.isRequired).isRequired,
-    topping: PropTypes.arrayOf(ingredientsPropTypes.isRequired).isRequired,
-    openModal: PropTypes.func
-};
