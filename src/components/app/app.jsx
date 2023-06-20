@@ -16,7 +16,7 @@ import Loading from '../loading/loading';
 
 function App() {
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
   const { isOrderModalOpen, isIngredientModalOpen, isErrorModalOpen } = useSelector(getModal);
 
   const onCloseModal = useCallback(() => {
