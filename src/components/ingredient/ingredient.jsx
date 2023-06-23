@@ -1,12 +1,11 @@
 import styles from './ingredient.module.css';
 import { ingredientsPropTypes } from '../../utils/types';
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useDispatch, useSelector } from 'react-redux';
-import { showIngredientDetails } from '../../services/modal/actions';
-import { addIngredientDetails } from '../../services/ingredient-details/actions';
+import { useSelector } from 'react-redux';
 import { useDrag } from 'react-dnd';
 import { useEffect, useState } from 'react';
 import { getConstructor } from '../../services/burger-constructor/selectors';
+import { Link, useLocation } from 'react-router-dom';
 
 function Ingredient(props) {
 
@@ -14,7 +13,7 @@ function Ingredient(props) {
         ingredient,
     } = props;
 
-    const dispatch = useDispatch();
+    const location = useLocation();
     const { bun, ingredients } = useSelector(getConstructor);
     const [ingredientCount, setIngredientCount] = useState(null);
 
@@ -51,13 +50,14 @@ function Ingredient(props) {
         })
     });
 
-    function onIngredientClick() {
-        dispatch(addIngredientDetails(ingredient));
-        dispatch(showIngredientDetails('Детали ингредиента'));
-    }
-
     return (
-        <section ref={ref} className={styles[`${isDragging ? 'ingredient-dragging' : 'ingredient'}`]} onClick={onIngredientClick}>
+        <Link
+            key={ingredient._id}
+            to={`/ingredients/${ingredient._id}`}
+            state={{ background: location }}
+            ref={ref}
+            className={styles[`${isDragging ? 'ingredient-dragging' : 'ingredient'}`]}
+        >
             {ingredientCount && (
                 <div className={styles['counter-container']}>
                     <Counter count={ingredientCount} size="default" extraClass="m-0" />
@@ -69,7 +69,7 @@ function Ingredient(props) {
                 <CurrencyIcon type="primary" />
             </div>
             <p className={styles['item-name']}>{ingredient.name}</p>
-        </section>
+        </Link>
     );
 }
 

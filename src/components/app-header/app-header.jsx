@@ -5,13 +5,6 @@ import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-dev
 
 const AppHeader = React.memo(() => {
 
-    // Заготовка методов для будущих кликов по кнопкам в шапке
-    function onBurgerButtonClick() { }
-
-    function onListButtonClick() { }
-
-    function onProfileButtonClick() { }
-
     return (
         <header className={styles['app-header']}>
             <nav className={styles['nav-container']}>
@@ -19,12 +12,12 @@ const AppHeader = React.memo(() => {
                     <HeaderButton
                         Icon={BurgerIcon}
                         text='Конструктор'
-                        onButtonClick={onBurgerButtonClick}
+                        currentPath={'/'}
                     />
                     <HeaderButton
                         Icon={ListIcon}
                         text='Лента заказов'
-                        onButtonClick={onListButtonClick}
+                        currentPath={'/order-list'}
                     />
                 </div>
                 <div className={styles['logo-container']}>
@@ -33,7 +26,7 @@ const AppHeader = React.memo(() => {
                 <HeaderButton
                     Icon={ProfileIcon}
                     text='Личный кабинет'
-                    onButtonClick={onProfileButtonClick}
+                    currentPath={'/profile'}
                 />
             </nav>
         </header>

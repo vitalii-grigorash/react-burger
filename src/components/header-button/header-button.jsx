@@ -1,39 +1,25 @@
-import { useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from './header-button.module.css';
+import { Link, useMatch } from 'react-router-dom';
 
 function HeaderButton(props) {
 
     const {
         Icon,
         text,
-        onButtonClick
+        currentPath
     } = props;
 
-    const [type, setType] = useState('secondary');
-
-    // Вместо ховеров при наведении на кнопку для смены цвета иконки для событий "onMouseMove" и "onMouseLeave"
-    // Может цвета меняются не при наведении, а когда кнопка активна, но из макета не понятно
-    // Уточнить и в будущем переделать, если нужно
-
-    function primaryType() {
-        setType('primary');
-    }
-
-    function secondaryType() {
-        setType('secondary');
-    }
+    const isMatch = useMatch(currentPath);
 
     return (
-        <div
-            className={styles['header-button']}
-            onClick={onButtonClick}
-            onMouseMove={primaryType}
-            onMouseLeave={secondaryType}
+        <Link
+            className={styles[`${isMatch ? 'header-button-active' : 'header-button'}`]}
+            to={currentPath}
         >
-            <Icon type={type} />
+            <Icon type={isMatch ? 'primary' : 'secondary'} />
             <p className={styles['button-text']}>{text}</p>
-        </div>
+        </Link>
     );
 }
 
@@ -42,5 +28,5 @@ export default HeaderButton;
 HeaderButton.propTypes = {
     Icon: PropTypes.func,
     text: PropTypes.string,
-    onButtonClick: PropTypes.func
+    currentPath: PropTypes.string
 };

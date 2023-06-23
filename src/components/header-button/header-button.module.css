@@ -6,9 +6,10 @@
     align-items: center;
     color: #8585AD;
     border-radius: 40px;
+    text-decoration: none;
 }
-.header-button:hover {
-    cursor: pointer;
+.header-button-active {
+    composes: header-button;
     color: #F2F2F3;
 }
 .button-text {

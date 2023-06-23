@@ -15,7 +15,7 @@ function Modal(props) {
         onClose
     } = props;
 
-    const { isModalOpen, modalTitle } = useSelector(getModal);
+    const { modalTitle } = useSelector(getModal);
 
     const handleCloseModal = useCallback((e) => {
         if (e.key === 'Escape') {
@@ -32,22 +32,18 @@ function Modal(props) {
 
     return createPortal(
         <>
-            {isModalOpen && (
-                <>
-                    <div className={styles.modal}>
-                        <div className={styles['modal-container']}>
-                            <div className={styles['modal-heading-container']}>
-                                <h2 className={styles['modal-heading']}>{modalTitle}</h2>
-                                <div className={styles['close-button-container']} onClick={onClose}>
-                                    <CloseIcon type="primary" />
-                                </div>
-                            </div>
-                            {children}
+            <div className={styles.modal}>
+                <div className={styles['modal-container']}>
+                    <div className={styles['modal-heading-container']}>
+                        <h2 className={styles['modal-heading']}>{modalTitle}</h2>
+                        <div className={styles['close-button-container']} onClick={onClose}>
+                            <CloseIcon type="primary" />
                         </div>
                     </div>
-                    <ModalOverlay onClose={onClose} />
-                </>
-            )}
+                    {children}
+                </div>
+            </div>
+            <ModalOverlay onClose={onClose} />
         </>,
         modalRoot
     )
