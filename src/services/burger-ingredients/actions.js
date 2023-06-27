@@ -25,7 +25,7 @@ export function loadIngredients() {
                 dispatch(loaderOff());
             })
             .catch((err) => {
-                dispatch(errorOn(`Ошибка: ${err}. Попробуйте еще раз...`));
+                dispatch(errorOn(`Ошибка: ${err.message}.`));
                 dispatch(loaderOff());
                 dispatch(showErrorDetails('Ошибка при запросе'));
                 dispatch(loadingError());
