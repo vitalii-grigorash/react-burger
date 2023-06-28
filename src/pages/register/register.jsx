@@ -25,13 +25,11 @@ function Register() {
 
     function handleRegister(e) {
         e.preventDefault();
-
         const data = {
             email: emailValue,
             password: passwordValue,
             name: nameValue
         }
-
         dispatch(register(data));
     }
 

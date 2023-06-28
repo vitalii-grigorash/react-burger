@@ -82,14 +82,13 @@ export const getUser = () => {
     })
 }
 
-// для смены логина или пароля в профиле пользователя
-// export const changeUser = (data) => {
-//     return requestHelper('/auth/user', {
-//         method: 'PATCH',
-//         headers: {
-//             'Content-Type': 'application/json',
-//             authorization: localStorage.getItem('accessToken')
-//         },
-//         body: JSON.stringify(data)
-//     })
-// }
+export const changeUser = (data) => {
+    return fetchWithRefresh('/auth/user', {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            authorization: localStorage.getItem('accessToken')
+        },
+        body: JSON.stringify(data)
+    })
+}

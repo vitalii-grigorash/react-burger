@@ -10,9 +10,13 @@ import ErrorDetails from '../error-details/error-details';
 import FormContainer from '../form-container/form-container';
 import Login from '../../pages/login/login';
 import Register from '../../pages/register/register';
-import Profile from '../profile/profile';
+import Profile from '../../pages/profile/profile';
 import ForgotPassword from '../../pages/forgot-password/forgot-password';
 import ResetPassword from '../../pages/reset-password/reset-password';
+import User from '../../pages/user/user';
+import Orders from '../../pages/orders/orders';
+import OrderList from '../../pages/order-list/order-list';
+import NotFound from '../../pages/not-found/not-found';
 import { loadIngredients } from '../../services/burger-ingredients/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { getModal } from '../../services/modal/selectors';
@@ -23,7 +27,7 @@ import { OnlyAuth, OnlyUnAuth } from "../../utils/protected-route";
 import { closeModal } from '../../services/modal/actions';
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { checkUserAuth } from '../../services/user/actions'
+import { checkUserAuth } from '../../services/user/actions';
 import Loading from '../loading/loading';
 
 function App() {
@@ -109,14 +113,13 @@ function App() {
           </DndProvider>
         } />
         <Route path='/order-list'
-          element={<OnlyAuth component={<div>Лента заказов</div>} />}
+          element={<OrderList />}
         />
-        <Route path='/profile'
-          element={<OnlyAuth component={<Profile />} />}
-        />
-        <Route path='/profile/orders'
-          element={<OnlyAuth component={<div>История заказов</div>} />}
-        />
+        <Route path='/profile' element={<OnlyAuth component={<Profile />} />}>
+          <Route index element={<User />} />
+          <Route path='orders' element={<Orders />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
         {/* Для отдельной страницы с деталями ингредиентов */}
         <Route path='/ingredients/:id'
           element={
@@ -169,7 +172,7 @@ function App() {
             </FormContainer>
           } />}
         />
-        <Route path="*" element={<h1>Error 404</h1>} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
       {/* Для модалки с деталями ингредиентов */}
       {background && (
@@ -208,7 +211,6 @@ function App() {
         {/* ------------------------- */}
         <Loading />
       </div>
-
     </div>
   );
 }

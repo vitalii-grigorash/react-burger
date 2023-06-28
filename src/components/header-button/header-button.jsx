@@ -10,7 +10,7 @@ function HeaderButton(props) {
         currentPath
     } = props;
 
-    const isMatch = useMatch(currentPath);
+    const isMatch = useMatch(currentPath === '/profile' ? '/profile/*' : currentPath);
 
     return (
         <Link

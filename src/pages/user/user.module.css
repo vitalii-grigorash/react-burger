@@ -1,0 +1,17 @@
+.user {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto auto 60px;
+}
+.input-container {
+    display: flex;
+    margin: 24px auto 0;
+}
+.input-container:first-of-type {
+    margin: 0 auto;
+}
+.buttons-container {
+    display: flex;
+    margin: 24px 0 auto auto;
+    gap: 20px;
+}

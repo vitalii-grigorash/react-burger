@@ -1,0 +1,18 @@
+.not-found {
+    display: flex;
+    flex-direction: column;
+    margin: 120px auto auto;
+}
+.not-found-profile {
+    composes: not-found;
+    margin: 0 auto auto 60px;
+}
+.heading {
+    font-family: 'JetBrains Mono', Arial, sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 30px;
+    margin: 0 auto 24px;
+    color: #F2F2F3;
+}
