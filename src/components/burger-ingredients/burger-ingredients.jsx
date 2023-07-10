@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import styles from './burger-ingredients.module.css';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import Ingredients from '../ingredients/ingredients';
@@ -7,13 +7,39 @@ import { getIngredients } from '../../services/burger-ingredients/selectors';
 
 function BurgerIngredients() {
 
-    const { bun, sauce, topping } = useSelector(getIngredients);
+    const { ingredients } = useSelector(getIngredients);
     const [current, setCurrent] = useState('bun');
+
+    const [bun, setBun] = useState([]);
+    const [sauce, setSauce] = useState([]);
+    const [topping, setTopping] = useState([]);
 
     const bunRef = useRef(null);
     const sauceRef = useRef(null);
     const toppingRef = useRef(null);
     const tabsRef = useRef(null);
+
+    useEffect(() => {
+        
+        const bunArr = [];
+        const sauceArr = [];
+        const toppingArr = [];
+
+        ingredients.forEach((i) => {
+            if (i.type === 'bun') {
+                bunArr.push(i);
+            } else if (i.type === 'sauce') {
+                sauceArr.push(i);
+            } else if (i.type === 'main') {
+                toppingArr.push(i);
+            }
+        });
+
+        setBun(bunArr);
+        setSauce(sauceArr);
+        setTopping(toppingArr);
+
+    }, [ingredients])
 
     function onBunTabClick() {
         bunRef.current.scrollIntoView({ behavior: "smooth" });

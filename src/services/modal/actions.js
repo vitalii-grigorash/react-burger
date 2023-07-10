@@ -1,5 +1,4 @@
 import { OPEN_INGREDIENT_DETAILS, OPEN_ORDER_DETAILS, CLOSE_MODAL, OPEN_ERROR_DETAILS } from './types';
-import { deleteIngredientDetails } from '../ingredient-details/actions';
 import { errorOff } from '../loading/actions';
 
 export function showIngredientDetails(title) {
@@ -22,12 +21,9 @@ export function showErrorDetails(title) {
     }
 }
 
-export function closeModal(isIngredientModalOpen, isErrorModalOpen) {
+export function closeModal(isErrorModalOpen) {
     return dispatch => {
         dispatch({ type: CLOSE_MODAL });
-        if (isIngredientModalOpen) {
-            dispatch(deleteIngredientDetails());
-        }
         if (isErrorModalOpen) {
             dispatch(errorOff());
         }

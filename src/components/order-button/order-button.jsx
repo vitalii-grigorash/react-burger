@@ -9,13 +9,16 @@ import { incrementPrice, resetPrice } from '../../services/total-price/actions';
 import { errorOn } from '../../services/loading/actions';
 import { showErrorDetails } from '../../services/modal/actions';
 import { createOrder } from '../../services/order-details/actions';
+import { getUser } from '../../services/user/selectors';
+import { useNavigate } from 'react-router-dom';
 
 function OrderButton() {
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const { bun, ingredients } = useSelector(getConstructor);
-
+    const { user } = useSelector(getUser);
     const { totalPrice } = useSelector(getTotalPrice);
 
     useEffect(() => {
@@ -46,7 +49,11 @@ function OrderButton() {
             const data = {
                 ingredients: ingredientsId
             }
-            dispatch(createOrder(data));
+            if (user) {
+                dispatch(createOrder(data));
+            } else {
+                navigate('/login');
+            }
         } else {
             dispatch(errorOn(`${!bun ? 'Необходимо выбрать булку' : 'Необходимо добавить ингредиент'}`));
             dispatch(showErrorDetails('Ошибка оформления заказа'));

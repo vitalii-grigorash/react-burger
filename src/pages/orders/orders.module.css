@@ -1,0 +1,16 @@
+.orders {
+    display: flex;
+    flex-direction: column;
+    margin: -84px auto auto 40px;
+    width: 872px;
+    max-height: 750px;
+}
+.description {
+    font-family: 'JetBrains Mono', Arial, sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 30px;
+    margin: 0 auto auto 0;
+    color: #F2F2F3;
+}

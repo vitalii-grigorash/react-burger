@@ -1,0 +1,13 @@
+.order-list {
+    display: flex;
+    margin: 120px auto auto;
+}
+.heading {
+    font-family: 'JetBrains Mono', Arial, sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 30px;
+    margin: 0 auto auto;
+    color: #F2F2F3;
+}

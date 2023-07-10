@@ -1,0 +1,36 @@
+.form-container {
+    display: flex;
+    flex-direction: column;
+    margin: 180px auto auto;
+}
+.form-heading {
+    font-family: 'JetBrains Mono', Arial, sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 30px;
+    margin: auto;
+    color: #F2F2F3;
+}
+.form-change-container {
+    display: flex;
+    margin: 20px auto 0;
+}
+.form-change-container:first-of-type {
+    margin: 80px auto 0;
+}
+.form-change-text {
+    font-family: 'JetBrains Mono', Arial, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    margin: auto 8px auto auto;
+    color: #8585AD;
+}
+.form-change-link {
+    composes: form-change-text;
+    color: #4C4CFF;
+    text-decoration: none;
+    margin: auto auto auto 0;
+}
