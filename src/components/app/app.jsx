@@ -34,7 +34,7 @@ function App() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
+  const location = useLocation()
 
   const matchPattern = useMatch('/ingredients/:id');
   const background = location.state && location.state.background;
