@@ -7,26 +7,27 @@ import { setUser } from '../../services/user/actions';
 import { loaderOn, loaderOff, errorOn } from '../../services/loading/actions';
 import { showErrorDetails } from '../../services/modal/actions';
 import * as Api from '../../utils/api';
+import { IUser, IUserResponse } from '../../utils/types';
 
-function User() {
+function User(): JSX.Element {
 
     const dispatch = useDispatch();
 
     const { user } = useSelector(getUser);
-    const [nameValue, setNameValue] = useState('');
-    const [emailValue, setEmailValue] = useState('');
-    const [passwordValue, setPasswordValue] = useState('');
-    const [isButtonsActive, setIsButtonsActive] = useState(false);
+    const [nameValue, setNameValue] = useState<string>('');
+    const [emailValue, setEmailValue] = useState<string>('');
+    const [passwordValue, setPasswordValue] = useState<string>('');
+    const [isButtonsActive, setIsButtonsActive] = useState<boolean>(false);
 
-    const onNameChange = e => {
+    const onNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNameValue(e.target.value)
     }
 
-    const onEmailChange = e => {
+    const onEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmailValue(e.target.value)
     }
 
-    const onPasswordChange = e => {
+    const onPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPasswordValue(e.target.value)
     }
 
@@ -60,16 +61,16 @@ function User() {
         ]
     )
 
-    function handleSubmit(e) {
+    function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        const data = {
+        const data: IUser = {
             name: nameValue,
             email: emailValue,
             password: passwordValue
         }
         dispatch(loaderOn());
         Api.changeUser(data)
-            .then((res) => {
+            .then((res: IUserResponse) => {
                 dispatch(setUser(res.user));
                 dispatch(loaderOff());
                 setPasswordValue('');

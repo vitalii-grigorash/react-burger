@@ -1,6 +1,7 @@
 import { requestHelper, fetchWithRefresh } from './requestHelper';
+import { TEmail, IIngredientsId, TLogin, IUser, TResetPassword, IIngredient, IOrderDetails, IAuthResponse, IResponse, IUserResponse } from './types';
 
-export const getIngredients = () => {
+export const getIngredients = (): Promise<IIngredient[]> => {
     return requestHelper('/ingredients', {
         method: 'GET',
         headers: {
@@ -9,7 +10,7 @@ export const getIngredients = () => {
     })
 }
 
-export const createOrder = (data) => {
+export const createOrder = (data: IIngredientsId): Promise<IOrderDetails> => {
     return fetchWithRefresh(`/orders`, {
         method: 'POST',
         headers: {
@@ -20,7 +21,7 @@ export const createOrder = (data) => {
     })
 }
 
-export const login = (data) => {
+export const login = (data: TLogin): Promise<IAuthResponse> => {
     return requestHelper(`/auth/login`, {
         method: 'POST',
         headers: {
@@ -30,7 +31,7 @@ export const login = (data) => {
     })
 }
 
-export const register = (data) => {
+export const register = (data: IUser): Promise<IAuthResponse> => {
     return requestHelper(`/auth/register`, {
         method: 'POST',
         headers: {
@@ -40,7 +41,7 @@ export const register = (data) => {
     })
 }
 
-export const logout = () => {
+export const logout = (): Promise<IResponse> => {
     return requestHelper(`/auth/logout`, {
         method: 'POST',
         headers: {
@@ -52,7 +53,7 @@ export const logout = () => {
     })
 }
 
-export const sendEmail = (data) => {
+export const sendEmail = (data: TEmail): Promise<IResponse> => {
     return requestHelper(`/password-reset`, {
         method: 'POST',
         headers: {
@@ -62,7 +63,7 @@ export const sendEmail = (data) => {
     })
 }
 
-export const resetPassword = (data) => {
+export const resetPassword = (data: TResetPassword): Promise<IResponse> => {
     return requestHelper(`/password-reset/reset`, {
         method: 'POST',
         headers: {
@@ -72,7 +73,7 @@ export const resetPassword = (data) => {
     })
 }
 
-export const getUser = () => {
+export const getUser = (): Promise<IUserResponse> => {
     return fetchWithRefresh('/auth/user', {
         method: 'GET',
         headers: {
@@ -82,7 +83,7 @@ export const getUser = () => {
     })
 }
 
-export const changeUser = (data) => {
+export const changeUser = (data: IUser): Promise<IUserResponse> => {
     return fetchWithRefresh('/auth/user', {
         method: 'PATCH',
         headers: {

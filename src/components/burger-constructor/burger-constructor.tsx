@@ -9,14 +9,15 @@ import { selectBun, addIngredient, sortIngredients } from '../../services/burger
 import { getConstructor } from '../../services/burger-constructor/selectors';
 import uniqid from 'uniqid';
 import { useCallback } from 'react';
+import { IIngredient } from '../../utils/types';
 
-function BurgerConstructor() {
+function BurgerConstructor(): JSX.Element {
 
     const dispatch = useDispatch();
 
     const { ingredients } = useSelector(getConstructor);
 
-    function addNewIngredient(ingredient) {
+    function addNewIngredient(ingredient: IIngredient & { uniqKey?: string }) {
         ingredient.uniqKey = uniqid();
         if (ingredient.type === 'bun') {
             dispatch(selectBun(ingredient));
@@ -27,19 +28,19 @@ function BurgerConstructor() {
 
     const [, dropRef] = useDrop({
         accept: 'ingredient',
-        drop(ingredient) {
+        drop(ingredient: IIngredient) {
             addNewIngredient({ ...ingredient });
         },
     });
 
-    const moveCard = useCallback((dragIndex, hoverIndex) => {
-        const sortedIngredients = () => update(ingredients, {
+    const moveCard = useCallback((dragIndex: number, hoverIndex: number) => {
+        const sortedIngredients = (): IIngredient[] => update(ingredients, {
             $splice: [
                 [dragIndex, 1],
                 [hoverIndex, 0, ingredients[dragIndex]]
             ]
         })
-        const newSortedIngredients = sortedIngredients();
+        const newSortedIngredients: IIngredient[] = sortedIngredients();
         dispatch(sortIngredients(newSortedIngredients));
     }, [dispatch, ingredients]);
 
@@ -49,11 +50,11 @@ function BurgerConstructor() {
                 type="top"
                 text="(верх)"
             />
-            <ul className={styles[`${ingredients.length !== 0 ? 'constructor-container' : 'constructor-default-container'}`]}>
+            <div className={styles[`${ingredients.length !== 0 ? 'constructor-container' : 'constructor-default-container'}`]}>
                 {ingredients.length !== 0 ? (
                     <>
                         {
-                            ingredients.map((ingredient, index) => (
+                            ingredients.map((ingredient: IIngredient & { uniqKey: string }, index: number) => (
                                 <IngredientConstructor
                                     key={ingredient.uniqKey}
                                     ingredient={ingredient}
@@ -69,7 +70,7 @@ function BurgerConstructor() {
                         <p className={styles['default-container-text']}>Добавьте ингредиент</p>
                     </div>
                 )}
-            </ul>
+            </div>
             <BunConstructor
                 type="bottom"
                 text="(низ)"

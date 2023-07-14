@@ -1,13 +1,33 @@
 import styles from './ingredient-constructor.module.css';
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import PropTypes from 'prop-types';
-import { ingredientsPropTypes } from '../../utils/types';
+import { IIngredient } from '../../utils/types';
 import { useDispatch } from 'react-redux';
 import { deleteIngredient } from '../../services/burger-constructor/actions';
 import { useRef } from 'react';
 import { useDrop, useDrag } from 'react-dnd';
+import { Identifier } from 'dnd-core';
 
-function IngredientConstructor(props) {
+interface IIngredientConstructorProps {
+    ingredient: IIngredient & { uniqKey: string };
+    index: number;
+    moveCard: (dragIndex: number, hoverIndex: number) => void;
+    uniqKey: string;
+}
+
+type TDragObject = {
+    uniqKey: string;
+    index: number;
+}
+
+type TDragCollectedProps = {
+    isDragging: boolean
+}
+
+type TDropCollectedProps = {
+    handlerId: Identifier | null
+}
+
+function IngredientConstructor(props: IIngredientConstructorProps): JSX.Element {
 
     const {
         ingredient,
@@ -18,13 +38,13 @@ function IngredientConstructor(props) {
 
     const dispatch = useDispatch();
 
-    function deleteConstructorIngredient(uniqKey) {
+    function deleteConstructorIngredient(uniqKey: string) {
         dispatch(deleteIngredient(uniqKey));
     }
 
-    const ref = useRef(null);
+    const ref = useRef<HTMLDivElement | null>(null);
 
-    const [{ handlerId }, drop] = useDrop({
+    const [{ handlerId }, drop] = useDrop<TDragObject, unknown, TDropCollectedProps>({
         accept: 'sort',
         collect(monitor) {
             return {
@@ -44,7 +64,7 @@ function IngredientConstructor(props) {
             const hoverMiddleY =
                 (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
             const clientOffset = monitor.getClientOffset();
-            const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+            const hoverClientY = clientOffset!.y - hoverBoundingRect.top;
 
             if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
                 return;
@@ -57,7 +77,7 @@ function IngredientConstructor(props) {
         }
     });
 
-    const [{ isDragging }, drag] = useDrag({
+    const [{ isDragging }, drag] = useDrag<TDragObject, unknown, TDragCollectedProps>({
         type: 'sort',
         item: () => {
             return { uniqKey, index };
@@ -70,7 +90,7 @@ function IngredientConstructor(props) {
     drag(drop(ref));
 
     return (
-        <li ref={ref} key={ingredient.uniqKey} className={styles[`${isDragging ? 'topping-container-hide' : 'topping-container'}`]} data-handler-id={handlerId}>
+        <div ref={ref} key={ingredient.uniqKey} className={styles[`${isDragging ? 'topping-container-hide' : 'topping-container'}`]} data-handler-id={handlerId}>
             <DragIcon type="primary" />
             <div className={styles['item-container']}>
                 <ConstructorElement
@@ -80,15 +100,8 @@ function IngredientConstructor(props) {
                     handleClose={() => deleteConstructorIngredient(ingredient.uniqKey)}
                 />
             </div>
-        </li>
+        </div>
     );
 }
 
 export default IngredientConstructor;
-
-IngredientConstructor.propTypes = {
-    ingredient: ingredientsPropTypes.isRequired,
-    index: PropTypes.number,
-    moveCard: PropTypes.func,
-    uniqKey: PropTypes.string
-};

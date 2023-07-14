@@ -11,8 +11,9 @@ import { showErrorDetails } from '../../services/modal/actions';
 import { createOrder } from '../../services/order-details/actions';
 import { getUser } from '../../services/user/selectors';
 import { useNavigate } from 'react-router-dom';
+import { IIngredient, IIngredientsId } from '../../utils/types';
 
-function OrderButton() {
+function OrderButton(): JSX.Element {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -23,9 +24,9 @@ function OrderButton() {
 
     useEffect(() => {
         dispatch(resetPrice());
-        const allPrices = [];
+        const allPrices: number[] = [];
         if (ingredients.length !== 0) {
-            ingredients.forEach((ingredient) => {
+            ingredients.forEach((ingredient: IIngredient) => {
                 allPrices.push(ingredient.price);
             })
         }
@@ -41,15 +42,16 @@ function OrderButton() {
 
     function onOrderButtonClick() {
         if (bun && ingredients.length !== 0) {
-            const ingredientsId = [];
-            ingredients.forEach((ingredient) => {
+            const ingredientsId: string[] = [];
+            ingredients.forEach((ingredient: IIngredient) => {
                 ingredientsId.push(ingredient._id);
             })
             ingredientsId.push(bun._id);
-            const data = {
+            const data: IIngredientsId = {
                 ingredients: ingredientsId
             }
             if (user) {
+                /* @ts-ignore */
                 dispatch(createOrder(data));
             } else {
                 navigate('/login');

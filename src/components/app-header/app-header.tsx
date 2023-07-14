@@ -3,7 +3,7 @@ import styles from './app-header.module.css';
 import HeaderButton from '../header-button/header-button';
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
-const AppHeader = React.memo(() => {
+const AppHeader = React.memo((): JSX.Element => {
 
     return (
         <header className={styles['app-header']}>

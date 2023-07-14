@@ -1,10 +1,14 @@
 import { forwardRef } from 'react';
 import styles from './ingredients.module.css';
-import PropTypes from 'prop-types';
 import Ingredient from '../ingredient/ingredient';
-import { ingredientsPropTypes } from '../../utils/types';
+import { IIngredient } from '../../utils/types';
 
-const Ingredients = forwardRef((props, ref) => {
+interface IIngredientsProps {
+    heading: string;
+    data: IIngredient[];
+}
+
+const Ingredients = forwardRef<HTMLDivElement, IIngredientsProps>((props, ref): JSX.Element => {
 
     const {
         heading,
@@ -31,8 +35,3 @@ const Ingredients = forwardRef((props, ref) => {
 })
 
 export default Ingredients;
-
-Ingredients.propTypes = {
-    heading: PropTypes.string,
-    data: PropTypes.arrayOf(ingredientsPropTypes.isRequired).isRequired
-};

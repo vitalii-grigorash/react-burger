@@ -11,6 +11,7 @@ function Profile() {
     const isOrdersActive = useMatch('/profile/orders');
 
     function handleLogout() {
+        /* @ts-ignore */
         dispatch(logout());
     }
 

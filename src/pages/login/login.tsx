@@ -1,31 +1,32 @@
 import styles from './login.module.css';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { EmailInput, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDispatch } from 'react-redux';
 import { login } from '../../services/user/actions';
+import { TLogin } from '../../utils/types';
 
-function Login() {
+function Login(): JSX.Element {
 
     const dispatch = useDispatch();
-    const [emailValue, setEmailValue] = useState('');
-    const [passwordValue, setPasswordValue] = useState('');
+    const [emailValue, setEmailValue] = useState<string>('');
+    const [passwordValue, setPasswordValue] = useState<string>('');
 
-    const onEmailChange = e => {
+    const onEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmailValue(e.target.value);
     }
 
-    const onPasswordChange = e => {
+    const onPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPasswordValue(e.target.value);
     }
 
-    function handleLogin(e) {
+    function handleLogin(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
-        const data = {
+        const data: TLogin = {
             email: emailValue,
             password: passwordValue,
         }
-
+        /* @ts-ignore */
         dispatch(login(data));
     }
 

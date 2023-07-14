@@ -6,21 +6,22 @@ import { loaderOn, loaderOff, errorOn } from '../../services/loading/actions';
 import { showErrorDetails } from '../../services/modal/actions';
 import { useNavigate } from 'react-router-dom';
 import * as Api from '../../utils/api';
+import { TEmail } from '../../utils/types';
 
-function ForgotPassword() {
+function ForgotPassword(): JSX.Element {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const [emailValue, setEmailValue] = useState('');
+    const [emailValue, setEmailValue] = useState<string>('');
 
-    const onEmailChange = e => {
+    const onEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmailValue(e.target.value);
     }
 
-    function handleSendEmail(e) {
+    function handleSendEmail(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        const data = {
+        const data: TEmail = {
             email: emailValue
         }
         dispatch(loaderOn());

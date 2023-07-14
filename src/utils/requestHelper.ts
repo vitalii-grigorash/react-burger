@@ -1,16 +1,27 @@
 import { config } from './config';
+import { IRefreshData } from '../utils/types';
 
-const BASE_URL = config.baseUrl;
+const BASE_URL: string = config.baseUrl;
 
-function checkResponse(res) {
-    return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
+export interface IHeaders {
+    [key: string]: any;
 }
 
-export function requestHelper(url, options) {
-    return fetch(`${BASE_URL}${url}`, options).then(checkResponse)
+export interface IOptions {
+    method: string;
+    headers: IHeaders;
+    body?: string;
 }
 
-export const refreshToken = () => {
+const checkResponse = <T>(res: Response): Promise<T> => {
+    return res.ok ? res.json() : res.json().then((err: Response) => Promise.reject(err));
+}
+
+export const requestHelper = <T>(url: string, options: IOptions): Promise<T> => {
+    return fetch(`${BASE_URL}${url}`, options).then(checkResponse<T>)
+}
+
+export const refreshToken = (): Promise<IRefreshData> => {
     return fetch(`${BASE_URL}/auth/token`, {
         method: "POST",
         headers: {
@@ -19,14 +30,14 @@ export const refreshToken = () => {
         body: JSON.stringify({
             token: localStorage.getItem("refreshToken")
         }),
-    }).then(checkResponse);
+    }).then(checkResponse<IRefreshData>);
 };
 
-export const fetchWithRefresh = async (url, options) => {
+export const fetchWithRefresh = async <T>(url: string, options: IOptions): Promise<T> => {
     try {
         const res = await fetch(`${BASE_URL}${url}`, options);
-        return await checkResponse(res);
-    } catch (err) {
+        return await checkResponse<T>(res);
+    } catch (err: any) {
         if (err.message === "jwt expired") {
             const refreshData = await refreshToken();
             if (!refreshData.success) {
@@ -36,7 +47,7 @@ export const fetchWithRefresh = async (url, options) => {
             localStorage.setItem("accessToken", refreshData.accessToken);
             options.headers.authorization = refreshData.accessToken;
             const res = await fetch(`${BASE_URL}${url}`, options);
-            return await checkResponse(res);
+            return await checkResponse<T>(res);
         } else {
             return Promise.reject(err);
         }

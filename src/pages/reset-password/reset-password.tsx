@@ -6,20 +6,21 @@ import { loaderOn, loaderOff, errorOn } from '../../services/loading/actions';
 import { showErrorDetails } from '../../services/modal/actions';
 import { useNavigate } from 'react-router-dom';
 import * as Api from '../../utils/api';
+import { TResetPassword } from '../../utils/types';
 
-function ResetPassword() {
+function ResetPassword(): JSX.Element {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const [passwordValue, setPasswordValue] = useState('');
-    const [tokenValue, setCodeValue] = useState('');
+    const [passwordValue, setPasswordValue] = useState<string>('');
+    const [tokenValue, setCodeValue] = useState<string>('');
 
-    const onPasswordChange = e => {
+    const onPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPasswordValue(e.target.value)
     }
 
-    const onCodeChange = e => {
+    const onCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setCodeValue(e.target.value)
     }
 
@@ -29,9 +30,9 @@ function ResetPassword() {
         }
     }, [navigate])
 
-    function handleResetPassword(e) {
+    function handleResetPassword(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        const data = {
+        const data: TResetPassword = {
             password: passwordValue,
             token: tokenValue
         }

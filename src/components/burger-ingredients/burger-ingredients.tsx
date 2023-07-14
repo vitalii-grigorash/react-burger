@@ -4,28 +4,29 @@ import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import Ingredients from '../ingredients/ingredients';
 import { useSelector } from 'react-redux';
 import { getIngredients } from '../../services/burger-ingredients/selectors';
+import { IIngredient } from '../../utils/types';
 
-function BurgerIngredients() {
+function BurgerIngredients(): JSX.Element {
 
     const { ingredients } = useSelector(getIngredients);
-    const [current, setCurrent] = useState('bun');
+    const [current, setCurrent] = useState<'bun' | 'sauce' | 'topping'>('bun');
 
-    const [bun, setBun] = useState([]);
-    const [sauce, setSauce] = useState([]);
-    const [topping, setTopping] = useState([]);
+    const [bun, setBun] = useState<IIngredient[]>([]);
+    const [sauce, setSauce] = useState<IIngredient[]>([]);
+    const [topping, setTopping] = useState<IIngredient[]>([]);
 
-    const bunRef = useRef(null);
-    const sauceRef = useRef(null);
-    const toppingRef = useRef(null);
-    const tabsRef = useRef(null);
+    const bunRef = useRef<HTMLDivElement | null>(null);
+    const sauceRef = useRef<HTMLDivElement | null>(null);
+    const toppingRef = useRef<HTMLDivElement | null>(null);
+    const tabsRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
-        
-        const bunArr = [];
-        const sauceArr = [];
-        const toppingArr = [];
 
-        ingredients.forEach((i) => {
+        const bunArr: IIngredient[] = [];
+        const sauceArr: IIngredient[] = [];
+        const toppingArr: IIngredient[] = [];
+
+        ingredients.forEach((i: IIngredient) => {
             if (i.type === 'bun') {
                 bunArr.push(i);
             } else if (i.type === 'sauce') {
@@ -42,37 +43,45 @@ function BurgerIngredients() {
     }, [ingredients])
 
     function onBunTabClick() {
-        bunRef.current.scrollIntoView({ behavior: "smooth" });
+        bunRef.current && bunRef.current.scrollIntoView({ behavior: "smooth" });
     }
 
     function onSauceTabClick() {
-        sauceRef.current.scrollIntoView({ behavior: "smooth" });
+        sauceRef.current && sauceRef.current.scrollIntoView({ behavior: "smooth" });
     }
 
     function onToppingTabClick() {
-        toppingRef.current.scrollIntoView({ behavior: "smooth" });
+        toppingRef.current && toppingRef.current.scrollIntoView({ behavior: "smooth" });
     }
 
-    function getDiff(a, b) {
-        return Math.abs(a - b);
+    function getDiff(a: number | null, b: number | null): number | null {
+        if (a && b) {
+            return Math.abs(a - b);
+        } else {
+            return null
+        }
     }
 
     const handleScroll = () => {
-        const tabsBottom = tabsRef.current.getBoundingClientRect().bottom;
-        const bunTop = bunRef.current.getBoundingClientRect().top;
-        const sauceTop = sauceRef.current.getBoundingClientRect().top;
-        const toppingTop = toppingRef.current.getBoundingClientRect().top;
+        const tabsBottom = tabsRef.current && tabsRef.current.getBoundingClientRect().bottom;
+        const bunTop = bunRef.current && bunRef.current.getBoundingClientRect().top;
+        const sauceTop = sauceRef.current && sauceRef.current.getBoundingClientRect().top;
+        const toppingTop = toppingRef.current && toppingRef.current.getBoundingClientRect().top;
 
         const bunDiff = getDiff(tabsBottom, bunTop);
         const sauceDiff = getDiff(tabsBottom, sauceTop);
         const toppingDiff = getDiff(tabsBottom, toppingTop);
 
-        if (bunDiff < sauceDiff && bunDiff < toppingDiff) {
+        if (bunDiff && sauceDiff && toppingDiff) {
+            if (bunDiff < sauceDiff && bunDiff < toppingDiff) {
+                setCurrent('bun');
+            } else if (sauceDiff < bunDiff && sauceDiff < toppingDiff) {
+                setCurrent('sauce');
+            } else if (toppingDiff < bunDiff && toppingDiff < sauceDiff) {
+                setCurrent('topping');
+            }
+        } else {
             setCurrent('bun');
-        } else if (sauceDiff < bunDiff && sauceDiff < toppingDiff) {
-            setCurrent('sauce');
-        } else if (toppingDiff < bunDiff && toppingDiff < sauceDiff) {
-            setCurrent('topping');
         }
     }
 
