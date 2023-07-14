@@ -28,7 +28,7 @@ function Loading() {
                 </div>
             )}
         </>,
-        loadingRoot
+        loadingRoot!
     )
 }
 

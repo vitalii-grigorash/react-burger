@@ -7,7 +7,7 @@ function NotFound() {
     const navigate = useNavigate();
     const isProfilePage = useMatch('/profile/*');
 
-    function onMainPageClick () {
+    function onMainPageClick() {
         navigate('/');
     }
 

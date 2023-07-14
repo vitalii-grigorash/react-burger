@@ -1,8 +1,13 @@
 import styles from './form-container.module.css';
-import PropTypes from 'prop-types';
 import { Link, useMatch } from 'react-router-dom';
 
-function FormContainer(props) {
+interface IFormContainerProps {
+    children: React.ReactNode;
+    heading: string;
+    linkText: string;
+}
+
+function FormContainer(props: IFormContainerProps) {
 
     const {
         children,
@@ -38,9 +43,3 @@ function FormContainer(props) {
 }
 
 export default FormContainer;
-
-FormContainer.propTypes = {
-    children: PropTypes.element,
-    heading: PropTypes.string,
-    linkText: PropTypes.string
-};

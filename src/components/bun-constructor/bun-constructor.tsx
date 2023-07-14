@@ -1,10 +1,14 @@
 import styles from './bun-constructor.module.css';
-import PropTypes from 'prop-types';
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useSelector } from 'react-redux';
 import { getConstructor } from '../../services/burger-constructor/selectors';
 
-function BunConstructor(props) {
+interface IBunConstructorProps {
+    type: 'top' | 'bottom';
+    text: string;
+}
+
+function BunConstructor(props: IBunConstructorProps): JSX.Element {
 
     const {
         type,
@@ -33,8 +37,3 @@ function BunConstructor(props) {
 }
 
 export default BunConstructor;
-
-BunConstructor.propTypes = {
-    type: PropTypes.string,
-    text: PropTypes.string
-};

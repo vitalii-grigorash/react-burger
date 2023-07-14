@@ -29,8 +29,9 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { checkUserAuth } from '../../services/user/actions';
 import Loading from '../loading/loading';
+import { IIngredient } from '../../utils/types';
 
-function App() {
+function App(): JSX.Element {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -45,12 +46,13 @@ function App() {
   const [ingredientDetailsPageTitle, setIngredientDetailsPageTitle] = useState('');
 
   useEffect(() => {
+    /* @ts-ignore */
     dispatch(checkUserAuth());
   }, [dispatch])
 
   const getIngredientForDetails = useCallback(() => {
-    const ingredientId = matchPattern.params.id;
-    const ingredient = ingredients.find(ingredient => ingredient._id === ingredientId);
+    const ingredientId = matchPattern !== null && matchPattern.params.id;
+    const ingredient = ingredients.find((ingredient: IIngredient) => ingredient._id === ingredientId);
     return ingredient;
   }, [ingredients, matchPattern])
 
@@ -96,10 +98,12 @@ function App() {
     if (isIngredientModalOpen) {
       navigate(-1);
     }
+    /* @ts-ignore */
     dispatch(closeModal(isErrorModalOpen));
   }, [dispatch, isIngredientModalOpen, isErrorModalOpen, navigate])
 
   useEffect(() => {
+    /* @ts-ignore */
     dispatch(loadIngredients());
   }, [dispatch])
 
