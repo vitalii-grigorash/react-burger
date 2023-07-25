@@ -1,8 +1,20 @@
-import PropTypes from 'prop-types';
 import styles from './header-button.module.css';
 import { Link, useMatch } from 'react-router-dom';
 
-function HeaderButton(props) {
+type TIconTypes = 'secondary' | 'primary' | 'error' | 'success';
+
+type TIconProps = {
+    type: TIconTypes;
+    onClick?: () => void;
+};
+
+interface IHeaderButton {
+    Icon: ({ type }: TIconProps) => JSX.Element;
+    text: string;
+    currentPath: string;
+}
+
+function HeaderButton(props: IHeaderButton): JSX.Element {
 
     const {
         Icon,
@@ -24,9 +36,3 @@ function HeaderButton(props) {
 }
 
 export default HeaderButton;
-
-HeaderButton.propTypes = {
-    Icon: PropTypes.func,
-    text: PropTypes.string,
-    currentPath: PropTypes.string
-};

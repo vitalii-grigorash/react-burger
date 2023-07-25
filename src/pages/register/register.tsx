@@ -3,33 +3,35 @@ import { useState } from 'react';
 import { Input, EmailInput, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDispatch } from 'react-redux';
 import { register } from '../../services/user/actions';
+import { IUser } from '../../utils/types';
 
-function Register() {
+function Register(): JSX.Element {
 
     const dispatch = useDispatch();
-    const [nameValue, setNameValue] = useState('');
-    const [emailValue, setEmailValue] = useState('');
-    const [passwordValue, setPasswordValue] = useState('');
+    const [nameValue, setNameValue] = useState<string>('');
+    const [emailValue, setEmailValue] = useState<string>('');
+    const [passwordValue, setPasswordValue] = useState<string>('');
 
-    const onNameChange = e => {
+    const onNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNameValue(e.target.value);
     }
 
-    const onEmailChange = e => {
+    const onEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmailValue(e.target.value);
     }
 
-    const onPasswordChange = e => {
+    const onPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPasswordValue(e.target.value);
     }
 
-    function handleRegister(e) {
+    function handleRegister(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        const data = {
+        const data: IUser = {
             email: emailValue,
             password: passwordValue,
             name: nameValue
         }
+        /* @ts-ignore */
         dispatch(register(data));
     }
 

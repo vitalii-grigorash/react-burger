@@ -1,5 +1,5 @@
 import styles from './ingredient.module.css';
-import { ingredientsPropTypes } from '../../utils/types';
+import { IIngredient } from '../../utils/types';
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useSelector } from 'react-redux';
 import { useDrag } from 'react-dnd';
@@ -7,7 +7,11 @@ import { useEffect, useState } from 'react';
 import { getConstructor } from '../../services/burger-constructor/selectors';
 import { Link, useLocation } from 'react-router-dom';
 
-function Ingredient(props) {
+interface IIngredientProps {
+    ingredient: IIngredient;
+}
+
+function Ingredient(props: IIngredientProps): JSX.Element {
 
     const {
         ingredient,
@@ -15,7 +19,7 @@ function Ingredient(props) {
 
     const location = useLocation();
     const { bun, ingredients } = useSelector(getConstructor);
-    const [ingredientCount, setIngredientCount] = useState(null);
+    const [ingredientCount, setIngredientCount] = useState<number | null>(null);
 
     useEffect(() => {
         if (ingredient.type === 'bun') {
@@ -29,8 +33,10 @@ function Ingredient(props) {
                 setIngredientCount(null);
             }
         } else {
-            if (ingredients.length !== 0) {
-                const currentIngredient = ingredients.filter(constructorIngredient => constructorIngredient._id === ingredient._id);
+            const allIngredients: IIngredient[] = [...ingredients];
+
+            if (allIngredients.length !== 0) {
+                const currentIngredient = allIngredients.filter(constructorIngredient => constructorIngredient._id === ingredient._id);
                 if (currentIngredient.length !== 0) {
                     setIngredientCount(currentIngredient.length);
                 } else {
@@ -74,7 +80,3 @@ function Ingredient(props) {
 }
 
 export default Ingredient;
-
-Ingredient.propTypes = {
-    ingredient: ingredientsPropTypes.isRequired
-};
