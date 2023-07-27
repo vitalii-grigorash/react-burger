@@ -1,7 +1,18 @@
 import { requestHelper, fetchWithRefresh } from './requestHelper';
-import { TEmail, IIngredientsId, TLogin, IUser, TResetPassword, IIngredient, IOrderDetails, IAuthResponse, IResponse, IUserResponse } from './types';
+import {
+    TEmail,
+    IIngredientsId,
+    TLogin,
+    IUser,
+    TResetPassword,
+    IOrderDetails,
+    IAuthResponse,
+    IResponse,
+    IUserResponse,
+    IIngredientResponse
+} from './types';
 
-export const getIngredients = (): Promise<IIngredient[]> => {
+export const getIngredients = (): Promise<IIngredientResponse> => {
     return requestHelper('/ingredients', {
         method: 'GET',
         headers: {

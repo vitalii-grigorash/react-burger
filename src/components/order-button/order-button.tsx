@@ -2,7 +2,7 @@ import styles from './order-button.module.css';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useEffect } from 'react';
 import currencyIcon from '../../images/currency-icon.svg';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../utils/hooks';
 import { getConstructor } from '../../services/burger-constructor/selectors';
 import { getTotalPrice } from '../../services/total-price/selectors';
 import { incrementPrice, resetPrice } from '../../services/total-price/actions';
@@ -51,7 +51,6 @@ function OrderButton(): JSX.Element {
                 ingredients: ingredientsId
             }
             if (user) {
-                /* @ts-ignore */
                 dispatch(createOrder(data));
             } else {
                 navigate('/login');

@@ -1,7 +1,7 @@
 import styles from './ingredient.module.css';
 import { IIngredient } from '../../utils/types';
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../utils/hooks';
 import { useDrag } from 'react-dnd';
 import { useEffect, useState } from 'react';
 import { getConstructor } from '../../services/burger-constructor/selectors';

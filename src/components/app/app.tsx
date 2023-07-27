@@ -18,7 +18,6 @@ import Orders from '../../pages/orders/orders';
 import OrderList from '../../pages/order-list/order-list';
 import NotFound from '../../pages/not-found/not-found';
 import { loadIngredients } from '../../services/burger-ingredients/actions';
-import { useDispatch, useSelector } from 'react-redux';
 import { getModal } from '../../services/modal/selectors';
 import { getIngredients } from '../../services/burger-ingredients/selectors';
 import { showIngredientDetails } from '../../services/modal/actions';
@@ -30,6 +29,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { checkUserAuth } from '../../services/user/actions';
 import Loading from '../loading/loading';
 import { IIngredient } from '../../utils/types';
+import { useDispatch, useSelector } from '../../utils/hooks';
 import * as H from 'history';
 
 function App(): JSX.Element {
@@ -50,20 +50,21 @@ function App(): JSX.Element {
   const [ingredientDetailsPageTitle, setIngredientDetailsPageTitle] = useState<string>('');
 
   useEffect(() => {
-    /* @ts-ignore */
     dispatch(checkUserAuth());
   }, [dispatch])
 
-  const getIngredientForDetails = useCallback(() => {
+  const getIngredientForDetails = useCallback((): IIngredient | undefined => {
     const ingredientId = matchPattern !== null && matchPattern.params.id;
-    const ingredient: IIngredient = ingredients.find((ingredient: IIngredient): boolean => ingredient._id === ingredientId);
+    const ingredient = ingredients.find((ingredient) => ingredient._id === ingredientId);
     return ingredient;
   }, [ingredients, matchPattern])
 
   const ingredientDetailsForModal = useCallback(() => {
     const selectedIngredient = getIngredientForDetails();
-    dispatch(addIngredientDetails(selectedIngredient));
-    dispatch(showIngredientDetails('Детали ингредиента'));
+    if (selectedIngredient !== undefined) {
+      dispatch(addIngredientDetails(selectedIngredient));
+      dispatch(showIngredientDetails('Детали ингредиента'));
+    }
   }, [dispatch, getIngredientForDetails])
 
   const ingredientDetailsForPage = useCallback(() => {
@@ -102,12 +103,10 @@ function App(): JSX.Element {
     if (isIngredientModalOpen) {
       navigate(-1);
     }
-    /* @ts-ignore */
     dispatch(closeModal(isErrorModalOpen));
   }, [dispatch, isIngredientModalOpen, isErrorModalOpen, navigate])
 
   useEffect(() => {
-    /* @ts-ignore */
     dispatch(loadIngredients());
   }, [dispatch])
 

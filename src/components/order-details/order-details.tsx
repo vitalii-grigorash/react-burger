@@ -1,7 +1,7 @@
 import styles from './order-details.module.css';
 import doneIcon from '../../images/done-icon.svg';
 import { getOrderDetails } from '../../services/order-details/selectors';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../utils/hooks';
 
 function OrderDetails() {
 

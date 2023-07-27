@@ -10,7 +10,13 @@ export interface IIngredient {
     image: string;
     image_mobile: string;
     image_large: string;
+    uniqKey?: string;
     __v?: number
+}
+
+export interface IIngredientResponse {
+    success: boolean;
+    data: IIngredient[];
 }
 
 export interface IIngredientsId {
@@ -21,7 +27,7 @@ export interface IUser {
     name: string;
     email: string;
     password: string;
-} 
+}
 
 export type TLogin = Omit<IUser, 'name'>
 

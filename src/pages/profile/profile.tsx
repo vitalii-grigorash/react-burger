@@ -1,6 +1,6 @@
 import styles from './profile.module.css';
 import { logout } from '../../services/user/actions';
-import { useDispatch } from 'react-redux';
+import { useDispatch } from '../../utils/hooks';
 import { Link, Outlet, useMatch } from 'react-router-dom';
 
 function Profile() {
@@ -11,7 +11,6 @@ function Profile() {
     const isOrdersActive = useMatch('/profile/orders');
 
     function handleLogout() {
-        /* @ts-ignore */
         dispatch(logout());
     }
 

@@ -1,6 +1,6 @@
 import styles from './ingredient-details.module.css';
 import { getIngredientDetails } from '../../services/ingredient-details/selectors';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../utils/hooks';
 
 function IngredientDetails() {
 

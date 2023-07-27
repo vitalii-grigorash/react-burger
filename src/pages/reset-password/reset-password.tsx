@@ -1,7 +1,7 @@
 import styles from './reset-password.module.css';
 import { useLayoutEffect, useState } from 'react';
 import { PasswordInput, Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useDispatch } from 'react-redux';
+import { useDispatch } from '../../utils/hooks';
 import { loaderOn, loaderOff, errorOn } from '../../services/loading/actions';
 import { showErrorDetails } from '../../services/modal/actions';
 import { useNavigate } from 'react-router-dom';

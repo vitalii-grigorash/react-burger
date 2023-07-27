@@ -1,7 +1,7 @@
 import styles from './register.module.css';
 import { useState } from 'react';
 import { Input, EmailInput, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useDispatch } from 'react-redux';
+import { useDispatch } from '../../utils/hooks';
 import { register } from '../../services/user/actions';
 import { IUser } from '../../utils/types';
 
@@ -31,7 +31,6 @@ function Register(): JSX.Element {
             password: passwordValue,
             name: nameValue
         }
-        /* @ts-ignore */
         dispatch(register(data));
     }
 

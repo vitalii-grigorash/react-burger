@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../utils/hooks';
 import styles from './user.module.css';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { getUser } from '../../services/user/selectors';
@@ -32,32 +32,35 @@ function User(): JSX.Element {
     }
 
     const defaultFields = useCallback(() => {
-        setNameValue(user.name);
-        setEmailValue(user.email);
-        setPasswordValue('');
-    }, [user.name, user.email])
+        if (user) {
+            setNameValue(user.name);
+            setEmailValue(user.email);
+            setPasswordValue('');
+        }
+    }, [user])
 
     useLayoutEffect(() => {
         defaultFields();
     }, [defaultFields])
 
     useEffect(() => {
-        if (
-            nameValue === user.name &&
-            emailValue === user.email &&
-            passwordValue === ''
-        ) {
-            setIsButtonsActive(false);
-        } else {
-            setIsButtonsActive(true);
+        if (user) {
+            if (
+                nameValue === user.name &&
+                emailValue === user.email &&
+                passwordValue === ''
+            ) {
+                setIsButtonsActive(false);
+            } else {
+                setIsButtonsActive(true);
+            }
         }
     },
         [
             nameValue,
             emailValue,
             passwordValue,
-            user.name,
-            user.email
+            user
         ]
     )
 
