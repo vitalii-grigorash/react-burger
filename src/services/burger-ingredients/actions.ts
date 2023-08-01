@@ -23,7 +23,6 @@ export const loadIngredients = (): AppThunk => {
         dispatch(loaderOn());
         Api.getIngredients()
             .then((res) => {
-                console.log(res);
                 dispatch(addIngredients(res.data))
                 dispatch(loaderOff());
             })

@@ -3,6 +3,7 @@ import { Routes, Route, useLocation, useNavigate, useMatch } from 'react-router-
 import styles from './app.module.css';
 import AppHeader from '../app-header/app-header';
 import Main from '../../pages/main/main';
+import OrderFeed from '../../pages/order-feed/order-feed';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import IngredientDetails from '../ingredient-details/ingredient-details';
@@ -15,7 +16,6 @@ import ForgotPassword from '../../pages/forgot-password/forgot-password';
 import ResetPassword from '../../pages/reset-password/reset-password';
 import User from '../../pages/user/user';
 import Orders from '../../pages/orders/orders';
-import OrderList from '../../pages/order-list/order-list';
 import NotFound from '../../pages/not-found/not-found';
 import { loadIngredients } from '../../services/burger-ingredients/actions';
 import { getModal } from '../../services/modal/selectors';
@@ -119,8 +119,8 @@ function App(): JSX.Element {
             <Main />
           </DndProvider>
         } />
-        <Route path='/order-list'
-          element={<OrderList />}
+        <Route path='/feed'
+          element={<OrderFeed />}
         />
         <Route path='/profile' element={<OnlyAuth component={<Profile />} />}>
           <Route index element={<User />} />

@@ -1,0 +1,11 @@
+.orders-status {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto auto 0;
+    width: 580px;
+    height: 626px;
+    border: 1px solid red;
+}
+.orders-heading {
+    margin: 0 auto auto 0;
+}

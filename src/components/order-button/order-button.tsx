@@ -43,6 +43,7 @@ function OrderButton(): JSX.Element {
     function onOrderButtonClick() {
         if (bun && ingredients.length !== 0) {
             const ingredientsId: string[] = [];
+            ingredientsId.push(bun._id);
             ingredients.forEach((ingredient: IIngredient) => {
                 ingredientsId.push(ingredient._id);
             })

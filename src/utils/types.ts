@@ -1,3 +1,21 @@
+export interface IOrderFeed {
+    createdAt: string;
+    ingredients: string[];
+    name: string;
+    number: string | number;
+    status: string;
+    updatedAt: string;
+    _id: string | number;
+}
+
+export interface IWSOrderFeedResponse {
+    orders: IOrderFeed[];
+    success: boolean;
+    total: number;
+    totalToday: number;
+    message?: string;
+}
+
 export interface IIngredient {
     _id: string;
     name: string;

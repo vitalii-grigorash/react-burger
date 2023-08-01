@@ -9,8 +9,25 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import { rootReducer } from './services';
 import { BrowserRouter } from 'react-router-dom';
+import { socketMiddleware } from './utils/socket-middleware';
+import { socketMiddlewareProfile } from './utils/socket-middleware-profile';
+import { TWSActions, TWSActionsProfile } from './utils/hooks';
+import { WsError, WsStatus, WsUpdateOrders } from './services/ws-orders/actions';
+import { WsErrorProfile, WsStatusProfile, WsUpdateOrdersProfile } from './services/ws-orders-profile/actions';
 
-const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
+const wsActions: TWSActions = {
+  onError: WsError,
+  onStatus: WsStatus,
+  onMessage: WsUpdateOrders
+}
+
+const wsActionsProfile: TWSActionsProfile = {
+  onErrorProfile: WsErrorProfile,
+  onStatusProfile: WsStatusProfile,
+  onMessageProfile: WsUpdateOrdersProfile
+}
+
+const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk, socketMiddleware(wsActions), socketMiddlewareProfile(wsActionsProfile))));
 
 const root = ReactDOM.createRoot(document.querySelector('#root') as HTMLDivElement);
 

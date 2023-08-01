@@ -17,7 +17,7 @@ const AppHeader = React.memo((): JSX.Element => {
                     <HeaderButton
                         Icon={ListIcon}
                         text='Лента заказов'
-                        currentPath={'/order-list'}
+                        currentPath={'/feed'}
                     />
                 </div>
                 <div className={styles['logo-container']}>
