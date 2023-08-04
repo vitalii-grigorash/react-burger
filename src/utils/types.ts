@@ -1,15 +1,5 @@
-export interface IOrderFeed {
-    createdAt: string;
-    ingredients: string[];
-    name: string;
-    number: string | number;
-    status: string;
-    updatedAt: string;
-    _id: string | number;
-}
-
 export interface IWSOrderFeedResponse {
-    orders: IOrderFeed[];
+    orders: IOrder[];
     success: boolean;
     total: number;
     totalToday: number;
@@ -29,6 +19,7 @@ export interface IIngredient {
     image_mobile: string;
     image_large: string;
     uniqKey?: string;
+    count?: number;
     __v?: number
 }
 
@@ -67,14 +58,20 @@ export interface IOwner {
 
 export interface IOrder {
     createdAt: string;
-    ingredients: IIngredient[];
+    ingredients: string[] | IIngredient[];
     name: string;
-    number: number;
-    owner: IOwner;
-    price: number;
+    number: number | string;
+    owner?: IOwner;
+    price?: number;
     status: string;
     updatedAt: string;
-    _id: string;
+    _id: string | number;
+    __v?: number
+}
+
+export interface IOrderResponse {
+    success: boolean;
+    orders: IOrder[];
 }
 
 export interface IOrderDetails {
@@ -96,4 +93,21 @@ export interface IAuthResponse extends IRefreshData {
 export interface IResponse {
     success: boolean;
     message: string;
+}
+
+export interface IDate {
+    time: string;
+    day: string;
+}
+
+export enum ConnectionStatus {
+    CONNECTING = 'CONNECTING',
+    ONLINE = 'ONLINE',
+    OFFLINE = 'OFFLINE'
+}
+
+export interface IWsOrdersState {
+    status: ConnectionStatus,
+    connectionError: string,
+    orders: IWSOrderFeedResponse | null
 }

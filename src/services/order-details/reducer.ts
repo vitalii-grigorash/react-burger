@@ -1,7 +1,7 @@
 import { OrderDetailsActionTypes, TOrderDetailsActions, IOrderDetailsState } from './types';
 
 const initialState: IOrderDetailsState = {
-    orderNumber: null,
+    order: null,
 }
 
 export const reducer = (state = initialState, action: TOrderDetailsActions): IOrderDetailsState => {
@@ -9,12 +9,12 @@ export const reducer = (state = initialState, action: TOrderDetailsActions): IOr
         case OrderDetailsActionTypes.ORDER_REQUEST_SUCCESS:
             return {
                 ...state,
-                orderNumber: action.payload,
+                order: action.payload,
             };
         case OrderDetailsActionTypes.ORDER_REQUEST_ERROR:
             return {
                 ...state,
-                orderNumber: null,
+                order: null,
             };
         default:
             return state;

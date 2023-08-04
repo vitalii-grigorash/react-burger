@@ -3,6 +3,7 @@ import { ModalActionTypes, TModalActions, IModalState } from './types';
 const initialState: IModalState = {
     isOrderModalOpen: false,
     isIngredientModalOpen: false,
+    isOrderFeedModalOpen: false,
     isErrorModalOpen: false,
     modalTitle: ''
 }
@@ -20,6 +21,11 @@ export const reducer = (state = initialState, action: TModalActions): IModalStat
                 isIngredientModalOpen: true,
                 modalTitle: action.payload
             };
+        case ModalActionTypes.OPEN_ORDER_FEED_DETAILS:
+            return {
+                ...state,
+                isOrderFeedModalOpen: true
+            };
         case ModalActionTypes.OPEN_ERROR_DETAILS:
             return {
                 ...state,
@@ -31,6 +37,7 @@ export const reducer = (state = initialState, action: TModalActions): IModalStat
                 ...state,
                 isOrderModalOpen: false,
                 isIngredientModalOpen: false,
+                isOrderFeedModalOpen: false,
                 isErrorModalOpen: false,
                 modalTitle: ''
             };

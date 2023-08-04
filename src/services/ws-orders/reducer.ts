@@ -1,4 +1,6 @@
-import { WsOrdersTypes, ConnectionStatus, IWsOrdersState, TWsOrdersActions } from './types';
+import { ConnectionStatus, IWsOrdersState } from '../../utils/types';
+import { createReducer } from '@reduxjs/toolkit';
+import { wsOpen, wsClose, wsMessage, wsError, wsConnecting } from "./actions";
 
 const initialState: IWsOrdersState = {
     status: ConnectionStatus.OFFLINE,
@@ -6,29 +8,22 @@ const initialState: IWsOrdersState = {
     orders: null
 };
 
-export const reducer = (state = initialState, action: TWsOrdersActions): IWsOrdersState => {
-    switch (action.type) {
-        case WsOrdersTypes.WS_STATUS:
-            return {
-                ...state,
-                status: action.payload,
-            }
-        case WsOrdersTypes.WS_ERROR:
-            return {
-                ...state,
-                connectionError: action.payload
-            }
-        case WsOrdersTypes.WS_UPDATE_ORDERS:
-            return {
-                ...state,
-                orders: action.payload,
-            }
-        case WsOrdersTypes.WS_DISCONNECT:
-            return {
-                ...state,
-                connectionError: '',
-                orders: null
-            }
-    }
-    return state;
-}
+export const reducer = createReducer(initialState, (builder) => {
+    builder
+        .addCase(wsConnecting, (state) => {
+            state.status = ConnectionStatus.CONNECTING;
+        })
+        .addCase(wsOpen, (state) => {
+            state.status = ConnectionStatus.ONLINE;
+            state.connectionError = '';
+        })
+        .addCase(wsClose, (state) => {
+            state.status = ConnectionStatus.OFFLINE;
+        })
+        .addCase(wsError, (state, action) => {
+            state.connectionError = action.payload;
+        })
+        .addCase(wsMessage, (state, action) => {
+            state.orders = action.payload;
+        })
+})

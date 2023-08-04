@@ -1,50 +1,89 @@
-import type { Middleware, MiddlewareAPI } from 'redux';
-import { IWSOrderFeedResponse } from './types';
-import { WsOrdersTypes, ConnectionStatus } from '../services/ws-orders/types';
-import type { TApplicationActions, TWSActions, AppDispatch } from './hooks';
+import { ActionCreatorWithoutPayload, ActionCreatorWithPayload } from '@reduxjs/toolkit';
+import { Middleware } from 'redux';
 import { RootState } from '../services';
+import { checkUserAuth } from '../services/user/actions';
+import { loaderOn, loaderOff } from '../services/loading/actions';
 
-export const socketMiddleware = (wsActions: TWSActions): Middleware => {
-    return ((store: MiddlewareAPI<AppDispatch, RootState>) => {
+export type TwsActionTypes = {
+    wsConnect: ActionCreatorWithPayload<string>,
+    wsDisconnect: ActionCreatorWithoutPayload,
+    wsSendMessage?: ActionCreatorWithPayload<any>,
+    wsConnecting: ActionCreatorWithoutPayload,
+    onOpen: ActionCreatorWithoutPayload,
+    onClose: ActionCreatorWithoutPayload,
+    onError: ActionCreatorWithPayload<string>,
+    onMessage: ActionCreatorWithPayload<any>,
+}
 
+export const socketMiddleware = (wsActions: TwsActionTypes): Middleware<{}, RootState> => {
+    return (store) => {
         let socket: WebSocket | null = null;
+        let isConnected = false;
+        let reconnectTimer = 0;
+        let url = '';
 
-        return next => (action: TApplicationActions) => {
-
+        return next => action => {
             const { dispatch } = store;
-            const { type } = action;
-            const { onError, onStatus, onMessage } = wsActions;
+            const { wsConnect, wsDisconnect, wsSendMessage, onOpen,
+                onClose, onError, onMessage, wsConnecting } = wsActions;
 
-            if (type === WsOrdersTypes.WS_CONNECT) {
-                socket = new WebSocket(action.payload);
-                dispatch(onStatus(ConnectionStatus.CONNECTING));
+            if (wsConnect.match(action)) {
+                url = action.payload;
+                socket = new WebSocket(url);
+                isConnected = true;
+                dispatch(wsConnecting());
+                dispatch(loaderOn());
             }
 
             if (socket) {
                 socket.onopen = () => {
-                    dispatch(onStatus(ConnectionStatus.ONLINE));
+                    dispatch(onOpen());
+                    dispatch(loaderOff());
                 };
 
                 socket.onerror = () => {
-                    dispatch(onError('Ошибка подключения'));
-                    dispatch(onStatus(ConnectionStatus.OFFLINE));
+                    dispatch(onError('error'));
                 };
 
                 socket.onmessage = event => {
                     const { data } = event;
-                    const orders: IWSOrderFeedResponse = JSON.parse(data);
-                    dispatch(onMessage(orders));
+                    const parsedData = JSON.parse(data);
+                    if (parsedData.success) {
+                        dispatch(onMessage(parsedData));
+                    } else if (parsedData.message === 'Invalid or missing token') {
+                        dispatch(checkUserAuth);
+                    }
                 };
 
-                socket.onclose = () => {
-                    dispatch(onStatus(ConnectionStatus.OFFLINE));
+                socket.onclose = event => {
+                    if (event.code !== 1000) {
+                        dispatch(onError(event.code.toString()));
+                    }
+                    dispatch(onClose());
+                    if (isConnected) {
+                        dispatch(wsConnecting());
+                        reconnectTimer = window.setTimeout(() => {
+                            dispatch(wsConnect(url));
+                        }, 3000)
+                    }
+
                 };
 
-                if (type === WsOrdersTypes.WS_DISCONNECT) {
+                if (wsSendMessage && wsSendMessage.match(action)) {
+                    socket.send(JSON.stringify(action.payload));
+                }
+
+                if (wsDisconnect.match(action)) {
+                    clearTimeout(reconnectTimer);
+                    isConnected = false;
+                    reconnectTimer = 0;
                     socket.close();
+                    socket = null;
+                    dispatch(onClose());
                 }
             }
+
             next(action);
         };
-    }) as Middleware;
+    };
 };

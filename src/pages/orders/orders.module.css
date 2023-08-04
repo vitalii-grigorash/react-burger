@@ -6,7 +6,6 @@
     max-height: 790px;
     overflow-y: scroll;
     row-gap: 24px;
-    border: 1px solid red;
 }
 .orders::-webkit-scrollbar {
     width: 8px;

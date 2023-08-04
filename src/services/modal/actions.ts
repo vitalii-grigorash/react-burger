@@ -1,4 +1,4 @@
-import { ModalActionTypes, IShowIngredientDetails, IShowOrderDetails, IShowErrorDetails, IHideAllDetails } from './types';
+import { ModalActionTypes, IShowIngredientDetails, IShowOrderDetails, IShowErrorDetails, IHideAllDetails, IShowOrderFeedDetails } from './types';
 import { errorOff } from '../loading/actions';
 import { AppThunk } from '../../utils/hooks';
 
@@ -12,6 +12,12 @@ export function showIngredientDetails(title: string): IShowIngredientDetails {
 export function showOrderDetails(): IShowOrderDetails {
     return {
         type: ModalActionTypes.OPEN_ORDER_DETAILS
+    }
+}
+
+export function showOrderFeedDetails(): IShowOrderFeedDetails {
+    return {
+        type: ModalActionTypes.OPEN_ORDER_FEED_DETAILS
     }
 }
 

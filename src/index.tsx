@@ -10,24 +10,51 @@ import thunk from 'redux-thunk';
 import { rootReducer } from './services';
 import { BrowserRouter } from 'react-router-dom';
 import { socketMiddleware } from './utils/socket-middleware';
-import { socketMiddlewareProfile } from './utils/socket-middleware-profile';
-import { TWSActions, TWSActionsProfile } from './utils/hooks';
-import { WsError, WsStatus, WsUpdateOrders } from './services/ws-orders/actions';
-import { WsErrorProfile, WsStatusProfile, WsUpdateOrdersProfile } from './services/ws-orders-profile/actions';
 
-const wsActions: TWSActions = {
-  onError: WsError,
-  onStatus: WsStatus,
-  onMessage: WsUpdateOrders
+import {
+  connect as WsConnect,
+  disconnect as WsDisconnect,
+  wsConnecting as WsConnecting,
+  wsOpen as WsOpen,
+  wsClose as WsClose,
+  wsMessage as WsNessage,
+  wsError as WsError
+} from "./services/ws-orders/actions";
+
+import {
+  connectProfile as WsConnectProfile,
+  disconnectProfile as WsDisconnectProfile,
+  wsConnectingProfile as WsConnectingProfile,
+  wsOpenProfile as WsOpenProfile,
+  wsCloseProfile as WsCloseProfile,
+  wsMessageProfile as WsNessageProfile,
+  wsErrorProfile as WsErrorProfile
+} from "./services/ws-orders-profile/actions";
+
+const wsActions = {
+  wsConnect: WsConnect,
+  wsDisconnect: WsDisconnect,
+  wsConnecting: WsConnecting,
+  onOpen: WsOpen,
+  onClose: WsClose,
+  onMessage: WsNessage,
+  onError: WsError
+};
+
+const wsActionsProfile = {
+  wsConnect: WsConnectProfile,
+  wsDisconnect: WsDisconnectProfile,
+  wsConnecting: WsConnectingProfile,
+  onOpen: WsOpenProfile,
+  onClose: WsCloseProfile,
+  onMessage: WsNessageProfile,
+  onError: WsErrorProfile
 }
 
-const wsActionsProfile: TWSActionsProfile = {
-  onErrorProfile: WsErrorProfile,
-  onStatusProfile: WsStatusProfile,
-  onMessageProfile: WsUpdateOrdersProfile
-}
+const liveTableMiddleware = socketMiddleware(wsActions);
+const liveTableMiddlewareProfile = socketMiddleware(wsActionsProfile);
 
-const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk, socketMiddleware(wsActions), socketMiddlewareProfile(wsActionsProfile))));
+const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk, liveTableMiddleware, liveTableMiddlewareProfile)));
 
 const root = ReactDOM.createRoot(document.querySelector('#root') as HTMLDivElement);
 

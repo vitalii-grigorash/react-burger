@@ -3,9 +3,10 @@ import Order from '../../components/order/order';
 import OrdersStatus from '../../components/orders-status/orders-status';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from '../../utils/hooks';
-import { WsConnect, WsDisconnect } from '../../services/ws-orders/actions';
+import { connect, disconnect } from '../../services/ws-orders/actions';
 import { config } from '../../utils/config';
 import { getWsOrders } from '../../services/ws-orders/selectors';
+import { Outlet } from 'react-router-dom';
 
 function OrderFeed(): JSX.Element {
 
@@ -14,8 +15,8 @@ function OrderFeed(): JSX.Element {
     const { orders } = useSelector(getWsOrders);
 
     useEffect(() => {
-        dispatch(WsConnect(config.wsUrl));
-        return () => dispatch(WsDisconnect());
+        dispatch(connect(config.wsUrl));
+        return () => dispatch(disconnect());
     }, [dispatch])
 
     return (
@@ -29,13 +30,18 @@ function OrderFeed(): JSX.Element {
                                 <Order
                                     key={order._id}
                                     orderDetails={order}
+                                    linkUrl={'feed'}
+                                    background={'backgroundOrders'}
                                 />
                             ))}
                         </>
                     )}
                 </div>
-                <OrdersStatus />
+                <OrdersStatus
+                    orders={orders}
+                />
             </div>
+            <Outlet />
         </section>
     )
 }

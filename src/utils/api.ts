@@ -9,7 +9,8 @@ import {
     IAuthResponse,
     IResponse,
     IUserResponse,
-    IIngredientResponse
+    IIngredientResponse,
+    IOrderResponse
 } from './types';
 
 export const getIngredients = (): Promise<IIngredientResponse> => {
@@ -29,6 +30,15 @@ export const createOrder = (data: IIngredientsId): Promise<IOrderDetails> => {
             authorization: localStorage.getItem('accessToken')
         },
         body: JSON.stringify(data)
+    })
+}
+
+export const getOrder = (orderNumber: string): Promise<IOrderResponse> => {
+    return requestHelper(`/orders/${orderNumber}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
     })
 }
 

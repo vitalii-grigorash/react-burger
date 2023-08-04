@@ -1,3 +1,5 @@
+import { IOrder } from '../../utils/types';
+
 export enum OrderDetailsActionTypes {
     ORDER_REQUEST_SUCCESS = 'ORDER_REQUEST_SUCCESS',
     ORDER_REQUEST_ERROR = 'ORDER_REQUEST_ERROR'
@@ -5,7 +7,7 @@ export enum OrderDetailsActionTypes {
 
 export interface IAddOrderDetails {
     readonly type: typeof OrderDetailsActionTypes.ORDER_REQUEST_SUCCESS;
-    readonly payload: number;
+    readonly payload: IOrder;
 }
 
 export interface ILoadingError {
@@ -18,5 +20,5 @@ export type TOrderDetailsActions =
 ;
 
 export interface IOrderDetailsState {
-    orderNumber: number | null,
+    order: IOrder | null,
 }

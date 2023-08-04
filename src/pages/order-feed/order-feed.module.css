@@ -2,7 +2,6 @@
     display: flex;
     flex-direction: column;
     margin: 40px auto auto;
-    border: 1px solid red;
 }
 .heading {
     font-family: 'JetBrains Mono', Arial, sans-serif;
@@ -11,12 +10,10 @@
     font-size: 36px;
     line-height: 40px;
     margin: 0 auto 0 0;
-    border: 1px solid red;
 }
 .main-container {
     display: flex;
     margin: 20px auto auto 0;
-    border: 1px solid red;
 }
 .orders-container {
     display: flex;
@@ -26,7 +23,6 @@
     overflow-y: scroll;
     margin: 0 60px auto 0;
     row-gap: 16px;
-    border: 1px solid red;
 }
 .orders-container::-webkit-scrollbar {
     width: 8px;

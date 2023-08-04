@@ -7,6 +7,7 @@ import OrderFeed from '../../pages/order-feed/order-feed';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import IngredientDetails from '../ingredient-details/ingredient-details';
+import OrderFeedDetails from '../order-feed-details/order-feed-details';
 import ErrorDetails from '../error-details/error-details';
 import FormContainer from '../form-container/form-container';
 import Login from '../../pages/login/login';
@@ -20,7 +21,7 @@ import NotFound from '../../pages/not-found/not-found';
 import { loadIngredients } from '../../services/burger-ingredients/actions';
 import { getModal } from '../../services/modal/selectors';
 import { getIngredients } from '../../services/burger-ingredients/selectors';
-import { showIngredientDetails } from '../../services/modal/actions';
+import { showIngredientDetails, showOrderFeedDetails } from '../../services/modal/actions';
 import { addIngredientDetails, deleteIngredientDetails } from '../../services/ingredient-details/actions';
 import { OnlyAuth, OnlyUnAuth } from "../../utils/protected-route";
 import { closeModal } from '../../services/modal/actions';
@@ -38,14 +39,16 @@ function App(): JSX.Element {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const matchPattern = useMatch('/ingredients/:id');
+  const ingredientPattern = useMatch('/ingredients/:id');
 
-  const state = location.state as { background?: H.Location };
+  const state = location.state as { backgroundIngredient?: H.Location; backgroundOrders?: H.Location; backgroundOrdersProfile?: H.Location; };
 
-  const background = state && state.background;
+  const backgroundIngredient = state && state.backgroundIngredient;
+  const backgroundOrders = state && state.backgroundOrders;
+  const backgroundOrdersProfile = state && state.backgroundOrdersProfile;
 
   const { ingredients } = useSelector(getIngredients);
-  const { isOrderModalOpen, isIngredientModalOpen, isErrorModalOpen } = useSelector(getModal);
+  const { isOrderModalOpen, isIngredientModalOpen, isOrderFeedModalOpen, isErrorModalOpen } = useSelector(getModal);
 
   const [ingredientDetailsPageTitle, setIngredientDetailsPageTitle] = useState<string>('');
 
@@ -54,10 +57,10 @@ function App(): JSX.Element {
   }, [dispatch])
 
   const getIngredientForDetails = useCallback((): IIngredient | undefined => {
-    const ingredientId = matchPattern !== null && matchPattern.params.id;
+    const ingredientId = ingredientPattern !== null && ingredientPattern.params.id;
     const ingredient = ingredients.find((ingredient) => ingredient._id === ingredientId);
     return ingredient;
-  }, [ingredients, matchPattern])
+  }, [ingredients, ingredientPattern])
 
   const ingredientDetailsForModal = useCallback(() => {
     const selectedIngredient = getIngredientForDetails();
@@ -79,10 +82,10 @@ function App(): JSX.Element {
 
   useEffect(() => {
     if (ingredients.length !== 0) {
-      if (background) {
+      if (backgroundIngredient) {
         ingredientDetailsForModal();
       }
-      if (matchPattern) {
+      if (ingredientPattern) {
         ingredientDetailsForPage();
       } else {
         dispatch(deleteIngredientDetails());
@@ -90,21 +93,41 @@ function App(): JSX.Element {
     }
   },
     [
-      matchPattern,
+      ingredientPattern,
       ingredients,
-      background,
+      backgroundIngredient,
       dispatch,
       ingredientDetailsForPage,
       ingredientDetailsForModal
     ]
   )
 
+  useEffect(() => {
+    if (backgroundOrders || backgroundOrdersProfile) {
+      dispatch(showOrderFeedDetails());
+    }
+  },
+    [
+      backgroundOrders,
+      backgroundOrdersProfile,
+      dispatch
+    ]
+  )
+
   const onCloseModal = useCallback(() => {
-    if (isIngredientModalOpen) {
+    if (isIngredientModalOpen || isOrderFeedModalOpen) {
       navigate(-1);
     }
     dispatch(closeModal(isErrorModalOpen));
-  }, [dispatch, isIngredientModalOpen, isErrorModalOpen, navigate])
+  },
+    [
+      dispatch,
+      isIngredientModalOpen,
+      isErrorModalOpen,
+      isOrderFeedModalOpen,
+      navigate
+    ]
+  )
 
   useEffect(() => {
     dispatch(loadIngredients());
@@ -113,18 +136,46 @@ function App(): JSX.Element {
   return (
     <div className={styles.app}>
       <AppHeader />
-      <Routes location={background || location}>
+      <Routes location={backgroundIngredient || location}>
         <Route path='/' element={
           <DndProvider backend={HTML5Backend}>
             <Main />
           </DndProvider>
         } />
-        <Route path='/feed'
-          element={<OrderFeed />}
-        />
+        <Route path='/feed' element={<OrderFeed />}>
+          {backgroundOrders && (
+            <Route
+              path=':number'
+              element={
+                <div className={styles['app-hidden']}>
+                  {isOrderFeedModalOpen && (
+                    <Modal onClose={onCloseModal}>
+                      <OrderFeedDetails />
+                    </Modal>
+                  )}
+                </div>
+              }
+            />
+          )}
+        </Route>
         <Route path='/profile' element={<OnlyAuth component={<Profile />} />}>
           <Route index element={<User />} />
-          <Route path='orders' element={<Orders />} />
+          <Route path='orders' element={<Orders />}>
+            {backgroundOrdersProfile && (
+              <Route
+                path=':number'
+                element={
+                  <div className={styles['app-hidden']}>
+                    {isOrderFeedModalOpen && (
+                      <Modal onClose={onCloseModal}>
+                        <OrderFeedDetails />
+                      </Modal>
+                    )}
+                  </div>
+                }
+              />
+            )}
+          </Route>
           <Route path="*" element={<NotFound />} />
         </Route>
         {/* Для отдельной страницы с деталями ингредиентов */}
@@ -137,6 +188,24 @@ function App(): JSX.Element {
               <IngredientDetails />
             </div>
           }
+        />
+        {/* ---------------------------------------------- */}
+        {/* Для отдельной страницы с деталями заказа общей ленты */}
+        <Route path='/feed/:number'
+          element={
+            <div className={styles['ingredient-container']}>
+              <OrderFeedDetails />
+            </div>
+          }
+        />
+        {/* ---------------------------------------------- */}
+        {/* Для отдельной страницы с деталями заказа ленты профиля */}
+        <Route path='/profile/orders/:number'
+          element={<OnlyAuth component={
+            <div className={styles['ingredient-container']}>
+              <OrderFeedDetails />
+            </div>
+          } />}
         />
         {/* ---------------------------------------------- */}
         <Route path='/login'
@@ -182,7 +251,7 @@ function App(): JSX.Element {
         <Route path="*" element={<NotFound />} />
       </Routes>
       {/* Для модалки с деталями ингредиентов */}
-      {background && (
+      {backgroundIngredient && (
         <Routes>
           <Route
             path='/ingredients/:id'

@@ -60,7 +60,7 @@ function Ingredient(props: IIngredientProps): JSX.Element {
         <Link
             key={ingredient._id}
             to={`/ingredients/${ingredient._id}`}
-            state={{ background: location }}
+            state={{ backgroundIngredient: location }}
             ref={ref}
             className={styles[`${isDragging ? 'ingredient-dragging' : 'ingredient'}`]}
         >
