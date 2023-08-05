@@ -1,0 +1,105 @@
+.order-feed-details {
+    display: flex;
+    flex-direction: column;
+    margin: 0 40px 40px;
+}
+.order-number {
+    font-family: 'Iceland', Arial, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 24px;
+    margin: -46px auto 0 0;
+}
+.order-number-page {
+    composes: order-number;
+    margin: 0 auto;
+    
+}
+.order-name {
+    font-family: 'JetBrains Mono', Arial, sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 30px;
+    color: #F2F2F3;
+    margin: 40px auto 0 0;
+    max-width: 640px;
+}
+.order-status {
+    font-family: 'JetBrains Mono', Arial, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: #F2F2F3;
+    margin: 8px auto 0 0;
+}
+.order-status-done {
+    composes: order-status;
+    color: #00CCCC;
+    margin: 8px auto 0 0;
+}
+.order-list {
+    composes: order-name;
+    margin: 60px auto 0 0;
+}
+.order-list-container {
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    margin: 24px 0 0;
+    max-height: 320px;
+}
+.order-list-container::-webkit-scrollbar {
+    width: 8px;
+    background: #2F2F37;
+}
+.order-list-container::-webkit-scrollbar-thumb {
+    background: #8585AD;
+}
+.order-container {
+    display: flex;
+    margin: 16px 24px 0 0;
+}
+.order-container:first-of-type {
+    margin: 0 24px 0 0;
+}
+.images-container {
+    display: flex;
+    width: 64px;
+    height: 64px;
+    border: 2px solid #801AB2;
+    border-radius: 50%;
+    overflow: hidden;
+    align-items: center;
+    justify-content: center;
+    background: #131316;
+    margin: 0 16px 0 0;
+}
+.ingeredient-img {
+    width: 112px;
+    height: 56px;
+}
+.ingeredient-name {
+    composes: order-status;
+    margin: auto auto auto 0;
+    max-width: 360px;
+}
+.price-container {
+    display: flex;
+    margin: auto 0 auto auto;
+}
+.ingeredient-price {
+    composes: order-number;
+    margin: auto 8px auto 0;
+}
+.bottom-container {
+    display: flex;
+    margin: 40px 0 0;
+}
+.order-date {
+    composes: order-status;
+    color: #8585AD;
+    margin: auto auto auto 0;
+}

@@ -1,0 +1,9 @@
+export enum WsOrdersTypes {
+    WS_CONNECT = 'WS_CONNECT',
+    WS_DISCONNECT = 'WS_DISCONNECT',
+    WS_CONNECTING = 'WS_CONNECTING',
+    WS_OPEN = 'WS_OPEN',
+    WS_CLOSE = 'WS_CLOSE',
+    WS_MESSAGE = 'WS_MESSAGE',
+    WS_ERROR = 'WS_ERROR'
+}

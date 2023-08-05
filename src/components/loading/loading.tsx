@@ -1,7 +1,7 @@
 import { createPortal } from 'react-dom';
 import styles from './loading.module.css';
 import { TailSpin } from 'react-loader-spinner';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../utils/hooks';
 import { getLoading } from '../../services/loading/selectors';
 const loadingRoot = document.getElementById("loading");
 

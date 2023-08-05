@@ -1,6 +1,6 @@
 import styles from './error-details.module.css';
 import { getLoading } from '../../services/loading/selectors';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../utils/hooks';
 
 function ErrorDetails(): JSX.Element {
 

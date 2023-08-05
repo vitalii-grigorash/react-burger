@@ -1,7 +1,7 @@
 import styles from './login.module.css';
 import React, { useState } from 'react';
 import { EmailInput, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useDispatch } from 'react-redux';
+import { useDispatch } from '../../utils/hooks';
 import { login } from '../../services/user/actions';
 import { TLogin } from '../../utils/types';
 
@@ -26,7 +26,6 @@ function Login(): JSX.Element {
             email: emailValue,
             password: passwordValue,
         }
-        /* @ts-ignore */
         dispatch(login(data));
     }
 

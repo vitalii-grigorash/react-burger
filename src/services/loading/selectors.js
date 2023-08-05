@@ -1,1 +1,0 @@
-export const getLoading = (store) => store.loading;

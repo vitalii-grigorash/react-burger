@@ -3,7 +3,7 @@ import update from "immutability-helper";
 import BunConstructor from '../bun-constructor/bun-constructor';
 import IngredientConstructor from '../ingredient-constructor/ingredient-constructor';
 import OrderButton from '../order-button/order-button';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from '../../utils/hooks';
 import { useDrop } from 'react-dnd';
 import { selectBun, addIngredient, sortIngredients } from '../../services/burger-constructor/actions';
 import { getConstructor } from '../../services/burger-constructor/selectors';
@@ -17,7 +17,7 @@ function BurgerConstructor(): JSX.Element {
 
     const { ingredients } = useSelector(getConstructor);
 
-    function addNewIngredient(ingredient: IIngredient & { uniqKey?: string }) {
+    function addNewIngredient(ingredient: IIngredient) {
         ingredient.uniqKey = uniqid();
         if (ingredient.type === 'bun') {
             dispatch(selectBun(ingredient));
@@ -54,7 +54,7 @@ function BurgerConstructor(): JSX.Element {
                 {ingredients.length !== 0 ? (
                     <>
                         {
-                            ingredients.map((ingredient: IIngredient & { uniqKey: string }, index: number) => (
+                            ingredients.map((ingredient: IIngredient, index: number) => (
                                 <IngredientConstructor
                                     key={ingredient.uniqKey}
                                     ingredient={ingredient}

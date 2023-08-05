@@ -1,21 +1,21 @@
 import styles from './ingredient-constructor.module.css';
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { IIngredient } from '../../utils/types';
-import { useDispatch } from 'react-redux';
+import { useDispatch } from '../../utils/hooks';
 import { deleteIngredient } from '../../services/burger-constructor/actions';
 import { useRef } from 'react';
 import { useDrop, useDrag } from 'react-dnd';
 import { Identifier } from 'dnd-core';
 
 interface IIngredientConstructorProps {
-    ingredient: IIngredient & { uniqKey: string };
+    ingredient: IIngredient;
     index: number;
     moveCard: (dragIndex: number, hoverIndex: number) => void;
-    uniqKey: string;
+    uniqKey?: string;
 }
 
 type TDragObject = {
-    uniqKey: string;
+    uniqKey?: string;
     index: number;
 }
 
@@ -38,8 +38,10 @@ function IngredientConstructor(props: IIngredientConstructorProps): JSX.Element 
 
     const dispatch = useDispatch();
 
-    function deleteConstructorIngredient(uniqKey: string) {
-        dispatch(deleteIngredient(uniqKey));
+    function deleteConstructorIngredient(uniqKey?: string) {
+        if (uniqKey !== undefined) {
+            dispatch(deleteIngredient(uniqKey));
+        }
     }
 
     const ref = useRef<HTMLDivElement | null>(null);

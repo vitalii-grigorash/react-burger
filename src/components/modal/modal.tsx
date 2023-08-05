@@ -3,7 +3,7 @@ import ModalOverlay from '../modal-overlay/modal-overlay';
 import styles from './modal.module.css';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useCallback, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../utils/hooks';
 import { getModal } from '../../services/modal/selectors';
 const modalRoot = document.getElementById("modal");
 

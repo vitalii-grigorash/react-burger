@@ -1,7 +1,7 @@
 import styles from './ingredient.module.css';
 import { IIngredient } from '../../utils/types';
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../utils/hooks';
 import { useDrag } from 'react-dnd';
 import { useEffect, useState } from 'react';
 import { getConstructor } from '../../services/burger-constructor/selectors';
@@ -60,7 +60,7 @@ function Ingredient(props: IIngredientProps): JSX.Element {
         <Link
             key={ingredient._id}
             to={`/ingredients/${ingredient._id}`}
-            state={{ background: location }}
+            state={{ backgroundIngredient: location }}
             ref={ref}
             className={styles[`${isDragging ? 'ingredient-dragging' : 'ingredient'}`]}
         >

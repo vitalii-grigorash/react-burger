@@ -1,7 +1,7 @@
 import styles from './forgot-password.module.css';
 import { useState } from 'react';
 import { EmailInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useDispatch } from 'react-redux';
+import { useDispatch } from '../../utils/hooks';
 import { loaderOn, loaderOff, errorOn } from '../../services/loading/actions';
 import { showErrorDetails } from '../../services/modal/actions';
 import { useNavigate } from 'react-router-dom';

@@ -3,9 +3,11 @@ import { Routes, Route, useLocation, useNavigate, useMatch } from 'react-router-
 import styles from './app.module.css';
 import AppHeader from '../app-header/app-header';
 import Main from '../../pages/main/main';
+import OrderFeed from '../../pages/order-feed/order-feed';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import IngredientDetails from '../ingredient-details/ingredient-details';
+import OrderFeedDetails from '../order-feed-details/order-feed-details';
 import ErrorDetails from '../error-details/error-details';
 import FormContainer from '../form-container/form-container';
 import Login from '../../pages/login/login';
@@ -15,13 +17,11 @@ import ForgotPassword from '../../pages/forgot-password/forgot-password';
 import ResetPassword from '../../pages/reset-password/reset-password';
 import User from '../../pages/user/user';
 import Orders from '../../pages/orders/orders';
-import OrderList from '../../pages/order-list/order-list';
 import NotFound from '../../pages/not-found/not-found';
 import { loadIngredients } from '../../services/burger-ingredients/actions';
-import { useDispatch, useSelector } from 'react-redux';
 import { getModal } from '../../services/modal/selectors';
 import { getIngredients } from '../../services/burger-ingredients/selectors';
-import { showIngredientDetails } from '../../services/modal/actions';
+import { showIngredientDetails, showOrderFeedDetails } from '../../services/modal/actions';
 import { addIngredientDetails, deleteIngredientDetails } from '../../services/ingredient-details/actions';
 import { OnlyAuth, OnlyUnAuth } from "../../utils/protected-route";
 import { closeModal } from '../../services/modal/actions';
@@ -30,6 +30,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { checkUserAuth } from '../../services/user/actions';
 import Loading from '../loading/loading';
 import { IIngredient } from '../../utils/types';
+import { useDispatch, useSelector } from '../../utils/hooks';
 import * as H from 'history';
 
 function App(): JSX.Element {
@@ -38,32 +39,35 @@ function App(): JSX.Element {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const matchPattern = useMatch('/ingredients/:id');
+  const ingredientPattern = useMatch('/ingredients/:id');
 
-  const state = location.state as { background?: H.Location };
+  const state = location.state as { backgroundIngredient?: H.Location; backgroundOrders?: H.Location; backgroundOrdersProfile?: H.Location; };
 
-  const background = state && state.background;
+  const backgroundIngredient = state && state.backgroundIngredient;
+  const backgroundOrders = state && state.backgroundOrders;
+  const backgroundOrdersProfile = state && state.backgroundOrdersProfile;
 
   const { ingredients } = useSelector(getIngredients);
-  const { isOrderModalOpen, isIngredientModalOpen, isErrorModalOpen } = useSelector(getModal);
+  const { isOrderModalOpen, isIngredientModalOpen, isOrderFeedModalOpen, isErrorModalOpen } = useSelector(getModal);
 
   const [ingredientDetailsPageTitle, setIngredientDetailsPageTitle] = useState<string>('');
 
   useEffect(() => {
-    /* @ts-ignore */
     dispatch(checkUserAuth());
   }, [dispatch])
 
-  const getIngredientForDetails = useCallback(() => {
-    const ingredientId = matchPattern !== null && matchPattern.params.id;
-    const ingredient: IIngredient = ingredients.find((ingredient: IIngredient): boolean => ingredient._id === ingredientId);
+  const getIngredientForDetails = useCallback((): IIngredient | undefined => {
+    const ingredientId = ingredientPattern !== null && ingredientPattern.params.id;
+    const ingredient = ingredients.find((ingredient) => ingredient._id === ingredientId);
     return ingredient;
-  }, [ingredients, matchPattern])
+  }, [ingredients, ingredientPattern])
 
   const ingredientDetailsForModal = useCallback(() => {
     const selectedIngredient = getIngredientForDetails();
-    dispatch(addIngredientDetails(selectedIngredient));
-    dispatch(showIngredientDetails('Детали ингредиента'));
+    if (selectedIngredient !== undefined) {
+      dispatch(addIngredientDetails(selectedIngredient));
+      dispatch(showIngredientDetails('Детали ингредиента'));
+    }
   }, [dispatch, getIngredientForDetails])
 
   const ingredientDetailsForPage = useCallback(() => {
@@ -78,10 +82,10 @@ function App(): JSX.Element {
 
   useEffect(() => {
     if (ingredients.length !== 0) {
-      if (background) {
+      if (backgroundIngredient) {
         ingredientDetailsForModal();
       }
-      if (matchPattern) {
+      if (ingredientPattern) {
         ingredientDetailsForPage();
       } else {
         dispatch(deleteIngredientDetails());
@@ -89,43 +93,89 @@ function App(): JSX.Element {
     }
   },
     [
-      matchPattern,
+      ingredientPattern,
       ingredients,
-      background,
+      backgroundIngredient,
       dispatch,
       ingredientDetailsForPage,
       ingredientDetailsForModal
     ]
   )
 
+  useEffect(() => {
+    if (backgroundOrders || backgroundOrdersProfile) {
+      dispatch(showOrderFeedDetails());
+    }
+  },
+    [
+      backgroundOrders,
+      backgroundOrdersProfile,
+      dispatch
+    ]
+  )
+
   const onCloseModal = useCallback(() => {
-    if (isIngredientModalOpen) {
+    if (isIngredientModalOpen || isOrderFeedModalOpen) {
       navigate(-1);
     }
-    /* @ts-ignore */
     dispatch(closeModal(isErrorModalOpen));
-  }, [dispatch, isIngredientModalOpen, isErrorModalOpen, navigate])
+  },
+    [
+      dispatch,
+      isIngredientModalOpen,
+      isErrorModalOpen,
+      isOrderFeedModalOpen,
+      navigate
+    ]
+  )
 
   useEffect(() => {
-    /* @ts-ignore */
     dispatch(loadIngredients());
   }, [dispatch])
 
   return (
     <div className={styles.app}>
       <AppHeader />
-      <Routes location={background || location}>
+      <Routes location={backgroundIngredient || location}>
         <Route path='/' element={
           <DndProvider backend={HTML5Backend}>
             <Main />
           </DndProvider>
         } />
-        <Route path='/order-list'
-          element={<OrderList />}
-        />
+        <Route path='/feed' element={<OrderFeed />}>
+          {backgroundOrders && (
+            <Route
+              path=':number'
+              element={
+                <div className={styles['app-hidden']}>
+                  {isOrderFeedModalOpen && (
+                    <Modal onClose={onCloseModal}>
+                      <OrderFeedDetails />
+                    </Modal>
+                  )}
+                </div>
+              }
+            />
+          )}
+        </Route>
         <Route path='/profile' element={<OnlyAuth component={<Profile />} />}>
           <Route index element={<User />} />
-          <Route path='orders' element={<Orders />} />
+          <Route path='orders' element={<Orders />}>
+            {backgroundOrdersProfile && (
+              <Route
+                path=':number'
+                element={
+                  <div className={styles['app-hidden']}>
+                    {isOrderFeedModalOpen && (
+                      <Modal onClose={onCloseModal}>
+                        <OrderFeedDetails />
+                      </Modal>
+                    )}
+                  </div>
+                }
+              />
+            )}
+          </Route>
           <Route path="*" element={<NotFound />} />
         </Route>
         {/* Для отдельной страницы с деталями ингредиентов */}
@@ -138,6 +188,24 @@ function App(): JSX.Element {
               <IngredientDetails />
             </div>
           }
+        />
+        {/* ---------------------------------------------- */}
+        {/* Для отдельной страницы с деталями заказа общей ленты */}
+        <Route path='/feed/:number'
+          element={
+            <div className={styles['ingredient-container']}>
+              <OrderFeedDetails />
+            </div>
+          }
+        />
+        {/* ---------------------------------------------- */}
+        {/* Для отдельной страницы с деталями заказа ленты профиля */}
+        <Route path='/profile/orders/:number'
+          element={<OnlyAuth component={
+            <div className={styles['ingredient-container']}>
+              <OrderFeedDetails />
+            </div>
+          } />}
         />
         {/* ---------------------------------------------- */}
         <Route path='/login'
@@ -183,7 +251,7 @@ function App(): JSX.Element {
         <Route path="*" element={<NotFound />} />
       </Routes>
       {/* Для модалки с деталями ингредиентов */}
-      {background && (
+      {backgroundIngredient && (
         <Routes>
           <Route
             path='/ingredients/:id'

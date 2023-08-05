@@ -1,6 +1,6 @@
 import styles from './bun-constructor.module.css';
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../utils/hooks';
 import { getConstructor } from '../../services/burger-constructor/selectors';
 
 interface IBunConstructorProps {
