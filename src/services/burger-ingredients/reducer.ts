@@ -1,6 +1,6 @@
 import { BurgerIngredientsTypes, TBurgerIngredientsActions, IBurgerIngredientsState } from './types';
 
-const initialState: IBurgerIngredientsState = {
+export const initialState: IBurgerIngredientsState = {
     ingredients: []
 }
 

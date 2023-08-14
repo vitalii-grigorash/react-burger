@@ -45,7 +45,7 @@ function BurgerConstructor(): JSX.Element {
     }, [dispatch, ingredients]);
 
     return (
-        <section ref={dropRef} className={styles['burger-constructor']}>
+        <section ref={dropRef} className={styles['burger-constructor']} data-testid="burger-constructor">
             <BunConstructor
                 type="top"
                 text="(верх)"

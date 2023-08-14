@@ -1,6 +1,6 @@
 import { ModalActionTypes, TModalActions, IModalState } from './types';
 
-const initialState: IModalState = {
+export const initialState: IModalState = {
     isOrderModalOpen: false,
     isIngredientModalOpen: false,
     isOrderFeedModalOpen: false,

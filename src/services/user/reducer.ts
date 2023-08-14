@@ -1,6 +1,6 @@
 import { UserActionTypes, IUserState, TUserActions } from './types';
 
-const initialState: IUserState = {
+export const initialState: IUserState = {
     user: null,
     isAuthChecked: false,
 };

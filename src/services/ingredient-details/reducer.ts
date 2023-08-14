@@ -1,6 +1,6 @@
 import { IngredientDetailsActionTypes, TIngredientDetailsActions, IIngredientDetailsState } from './types';
 
-const initialState: IIngredientDetailsState = {
+export const initialState: IIngredientDetailsState = {
     ingredient: null
 }
 

@@ -1,6 +1,6 @@
 import { LoadingActionTypes, TLoadingActions, ILoadingState } from "./types";
 
-const initialState: ILoadingState = {
+export const initialState: ILoadingState = {
     loading: false,
     error: null
 }

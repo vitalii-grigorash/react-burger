@@ -14,7 +14,7 @@ export function addOrderDetails(order: IOrder): IAddOrderDetails {
     }
 }
 
-function loadingError(): ILoadingError {
+export function loadingError(): ILoadingError {
     return {
         type: OrderDetailsActionTypes.ORDER_REQUEST_ERROR
     }
@@ -25,6 +25,7 @@ export function createOrder(data: IIngredientsId): AppThunk {
         dispatch(loaderOn());
         Api.createOrder(data)
             .then((res) => {
+                console.log(res);
                 dispatch(addOrderDetails(res.order));
                 dispatch(loaderOff());
                 dispatch(showOrderDetails());

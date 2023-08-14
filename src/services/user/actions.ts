@@ -20,6 +20,7 @@ export const getUser = (): AppThunk<Promise<void>> => {
         dispatch(loaderOn());
         return Api.getUser()
             .then((res) => {
+                console.log(res);
                 dispatch(setUser(res.user));
                 dispatch(loaderOff());
             });
@@ -33,6 +34,7 @@ export const login = (data: TLogin): AppThunk => {
             .then((res) => {
                 localStorage.setItem("accessToken", res.accessToken);
                 localStorage.setItem("refreshToken", res.refreshToken);
+                console.log(res);
                 dispatch(setUser(res.user));
                 dispatch(setAuthChecked(true));
                 dispatch(loaderOff());

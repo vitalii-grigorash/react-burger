@@ -1,6 +1,6 @@
 import { OrderDetailsActionTypes, TOrderDetailsActions, IOrderDetailsState } from './types';
 
-const initialState: IOrderDetailsState = {
+export const initialState: IOrderDetailsState = {
     order: null,
 }
 

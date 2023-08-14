@@ -1,6 +1,6 @@
 import { BurgerConstructorActionTypes, IBurgerConstructorState, TBurgerConstructorActions } from './types';
 
-const initialState: IBurgerConstructorState = {
+export const initialState: IBurgerConstructorState = {
     bun: null,
     ingredients: []
 }
