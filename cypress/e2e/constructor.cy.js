@@ -1,6 +1,14 @@
 import { config } from '../../src/utils/config';
 const BASE_URL = config.baseUrl;
 
+import {
+    modalCloseButton,
+    ingredientCard,
+    burgerConstructor,
+    orderButton,
+    orderNumber
+} from '../../src/utils/test-data';
+
 describe('e2e tests for main page', () => {
 
     beforeEach(() => {
@@ -12,65 +20,65 @@ describe('e2e tests for main page', () => {
         window.localStorage.setItem("accessToken", JSON.stringify("test-accessToken"));
 
         cy.viewport(1920, 1024);
-        cy.visit('http://localhost:3000/');
+        cy.visit('/');
 
     });
 
     it('should handle open ingredient details modal', () => {
-        cy.get('[data-testid=ingredient_card]').first().click();
+        cy.get(ingredientCard).first().click();
         cy.contains('Детали ингредиента');
-        cy.get('[data-testid=modal_close]').click();
+        cy.get(modalCloseButton).click();
     });
 
     it('should dnd bun ingredient to constructor', () => {
-        cy.get('[data-testid=ingredient_card]').first().trigger('dragstart');
-        cy.get('[data-testid=burger-constructor]').trigger('drop');
-        cy.get('[data-testid=ingredient_card]').eq(1).trigger('dragstart');
-        cy.get('[data-testid=burger-constructor]').trigger('drop');
+        cy.get(ingredientCard).first().trigger('dragstart');
+        cy.get(burgerConstructor).trigger('drop');
+        cy.get(ingredientCard).eq(1).trigger('dragstart');
+        cy.get(burgerConstructor).trigger('drop');
     });
 
     it('should dnd main ingredients to constructor', () => {
-        cy.get('[data-testid=ingredient_card]').eq(2).trigger('dragstart');
-        cy.get('[data-testid=burger-constructor]').trigger('drop');
-        cy.get('[data-testid=ingredient_card]').eq(3).trigger('dragstart');
-        cy.get('[data-testid=burger-constructor]').trigger('drop');
-        cy.get('[data-testid=ingredient_card]').eq(6).trigger('dragstart');
-        cy.get('[data-testid=burger-constructor]').trigger('drop');
+        cy.get(ingredientCard).eq(2).trigger('dragstart');
+        cy.get(burgerConstructor).trigger('drop');
+        cy.get(ingredientCard).eq(3).trigger('dragstart');
+        cy.get(burgerConstructor).trigger('drop');
+        cy.get(ingredientCard).eq(6).trigger('dragstart');
+        cy.get(burgerConstructor).trigger('drop');
     });
 
     it('should dnd bun and main ingredients', () => {
-        cy.get('[data-testid=ingredient_card]').first().trigger('dragstart');
-        cy.get('[data-testid=burger-constructor]').trigger('drop');
-        cy.get('[data-testid=ingredient_card]').eq(3).trigger('dragstart');
-        cy.get('[data-testid=burger-constructor]').trigger('drop');
-        cy.get('[data-testid=ingredient_card]').eq(5).trigger('dragstart');
-        cy.get('[data-testid=burger-constructor]').trigger('drop');
-        cy.get('[data-testid=ingredient_card]').eq(9).trigger('dragstart');
-        cy.get('[data-testid=burger-constructor]').trigger('drop');
+        cy.get(ingredientCard).first().trigger('dragstart');
+        cy.get(burgerConstructor).trigger('drop');
+        cy.get(ingredientCard).eq(3).trigger('dragstart');
+        cy.get(burgerConstructor).trigger('drop');
+        cy.get(ingredientCard).eq(5).trigger('dragstart');
+        cy.get(burgerConstructor).trigger('drop');
+        cy.get(ingredientCard).eq(9).trigger('dragstart');
+        cy.get(burgerConstructor).trigger('drop');
     })
 
     it('should handle open bun error', () => {
-        cy.get('[data-testid=order_button]').click();
+        cy.get(orderButton).click();
         cy.contains('Необходимо выбрать булку');
-        cy.get('[data-testid=modal_close]').click();
+        cy.get(modalCloseButton).click();
     })
 
     it('should handle open ingredient error', () => {
-        cy.get('[data-testid=ingredient_card]').first().trigger('dragstart');
-        cy.get('[data-testid=burger-constructor]').trigger('drop');
-        cy.get('[data-testid=order_button]').click();
+        cy.get(ingredientCard).first().trigger('dragstart');
+        cy.get(burgerConstructor).trigger('drop');
+        cy.get(orderButton).click();
         cy.contains('Необходимо добавить ингредиент');
-        cy.get('[data-testid=modal_close]').click();
+        cy.get(modalCloseButton).click();
     })
 
     it('should handle open order details', () => {
-        cy.get('[data-testid=ingredient_card]').first().trigger('dragstart');
-        cy.get('[data-testid=burger-constructor]').trigger('drop');
-        cy.get('[data-testid=ingredient_card]').eq(3).trigger('dragstart');
-        cy.get('[data-testid=burger-constructor]').trigger('drop');
-        cy.get('[data-testid=order_button]').click();
-        cy.get("[data-testid=order_number]").contains("16599").should("exist");
-        cy.get('[data-testid=modal_close]').click();
+        cy.get(ingredientCard).first().trigger('dragstart');
+        cy.get(burgerConstructor).trigger('drop');
+        cy.get(ingredientCard).eq(3).trigger('dragstart');
+        cy.get(burgerConstructor).trigger('drop');
+        cy.get(orderButton).click();
+        cy.get(orderNumber).contains("16599").should("exist");
+        cy.get(modalCloseButton).click();
     })
 
 })

@@ -1,5 +1,11 @@
 import { IIngredient, IOrder, IUser, IWSOrderFeedResponse } from './types';
 
+export const modalCloseButton = '[data-testid=modal_close]';
+export const ingredientCard = '[data-testid=ingredient_card]';
+export const burgerConstructor = '[data-testid=burger-constructor]';
+export const orderButton = '[data-testid=order_button]';
+export const orderNumber = '[data-testid=order_number]';
+
 export const ingredientsData: IIngredient[] = [
     {
         "_id": "643d69a5c3f7b9001cfa093c",
