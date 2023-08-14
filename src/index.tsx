@@ -8,7 +8,7 @@ import { composeWithDevTools } from '@redux-devtools/extension';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import { rootReducer } from './services';
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import { socketMiddleware } from './utils/socket-middleware';
 
 import {
@@ -60,11 +60,11 @@ const root = ReactDOM.createRoot(document.querySelector('#root') as HTMLDivEleme
 
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
+    <HashRouter>
       <Provider store={store}>
         <App />
       </Provider>
-    </BrowserRouter>
+    </HashRouter>
   </React.StrictMode>
 );
 
