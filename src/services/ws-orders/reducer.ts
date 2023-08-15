@@ -2,7 +2,7 @@ import { ConnectionStatus, IWsOrdersState } from '../../utils/types';
 import { createReducer } from '@reduxjs/toolkit';
 import { wsOpen, wsClose, wsMessage, wsError, wsConnecting } from "./actions";
 
-const initialState: IWsOrdersState = {
+export const initialState: IWsOrdersState = {
     status: ConnectionStatus.OFFLINE,
     connectionError: '',
     orders: null

@@ -63,6 +63,7 @@ function Ingredient(props: IIngredientProps): JSX.Element {
             state={{ backgroundIngredient: location }}
             ref={ref}
             className={styles[`${isDragging ? 'ingredient-dragging' : 'ingredient'}`]}
+            data-testid="ingredient_card"
         >
             {ingredientCount && (
                 <div className={styles['counter-container']}>

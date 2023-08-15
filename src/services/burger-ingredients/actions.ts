@@ -5,14 +5,14 @@ import { IIngredient } from '../../utils/types';
 import { AppThunk } from '../../utils/hooks';
 import * as Api from '../../utils/api';
 
-function addIngredients(ingredients: IIngredient[]): IAddIngredients {
+export function addIngredients(ingredients: IIngredient[]): IAddIngredients {
     return {
         type: BurgerIngredientsTypes.LOAD_INGREDIENTS_SUCCESS,
         payload: ingredients
     }
 }
 
-function loadingError(): ILoadingError {
+export function loadingError(): ILoadingError {
     return {
         type: BurgerIngredientsTypes.LOAD_INGREDIENTS_ERROR
     }

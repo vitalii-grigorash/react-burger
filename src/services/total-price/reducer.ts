@@ -1,6 +1,6 @@
 import { TotalPriceTypes, ITotalPriceState, TTotalPriceActions } from './types';
 
-const initialState: ITotalPriceState = {
+export const initialState: ITotalPriceState = {
     totalPrice: 0
 }
 

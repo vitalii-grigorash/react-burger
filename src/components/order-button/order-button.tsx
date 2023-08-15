@@ -68,7 +68,7 @@ function OrderButton(): JSX.Element {
                 <p className={styles['total-price']}>{totalPrice}</p>
                 <img className={styles['currency-icon']} src={currencyIcon} alt="Иконка большая" />
             </div>
-            <Button htmlType="button" type="primary" size="large" onClick={onOrderButtonClick}>
+            <Button htmlType="button" type="primary" size="large" onClick={onOrderButtonClick} data-testid="order_button">
                 Оформить заказ
             </Button>
         </div>

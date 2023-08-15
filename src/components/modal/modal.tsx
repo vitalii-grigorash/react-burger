@@ -40,7 +40,7 @@ function Modal(props: IModalProps) {
                 <div className={styles['modal-container']}>
                     <div className={styles['modal-heading-container']}>
                         <h2 className={styles['modal-heading']}>{modalTitle}</h2>
-                        <div className={styles['close-button-container']} onClick={onClose}>
+                        <div className={styles['close-button-container']} onClick={onClose} data-testid="modal_close">
                             <CloseIcon type="primary" />
                         </div>
                     </div>
